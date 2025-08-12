@@ -15,7 +15,7 @@ A standalone, deployable web app for mission control, status tracking, and inter
 
 1. Clone the repo.
 2. Open `index.html` in your browser.
-3. Customize as needed (see `app.js` for button logic).
+3. Customize as needed (see inline JS for button logic).
 
 ## Deployment
 
