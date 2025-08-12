@@ -5,7 +5,7 @@ A standalone, deployable web app for mission control, status tracking, and inter
 ## Features
 
 - **Status Indicator** (Active/Standby/Offline)
-- **Central Star Console** (see ![image1](image1))
+- **Central Star Console** (see (image1))
 - **Systems Online Display**
 - **Command Buttons:** INITIATE, ENGAGE, OPEN LINK, COOPIMATES
 - **Network Map Visual**
