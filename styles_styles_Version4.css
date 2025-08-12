@@ -1,0 +1,82 @@
+:root {
+  --bg-primary: #0a0f18;
+  --bg-panel: rgba(17, 24, 39, 0.5);
+  --border-color: rgba(0, 255, 255, 0.2);
+  --text-main: #E5E7EB;
+  --color-cyan-glow: rgba(0, 255, 255, 0.7);
+  --color-amber-warn: rgba(255, 191, 0, 0.8);
+  --color-red-alert: rgba(255, 107, 107, 0.9);
+  --neon-green: #39ff14;
+  --neon-orange: #ff9800;
+  --neon-cyan: #00eaff;
+  --panel-bg: #111;
+  --border-radius: 10px;
+  --max-width: 780px;
+  --birthday-gradient: none;
+}
+
+body.lightmode {
+  --bg-primary: #fff1fa;
+  --bg-panel: rgba(255,255,255,0.8);
+  --border-color: #ffb6ec;
+  --text-main: #3d155f;
+  --color-cyan-glow: #b3e6ff;
+  --color-amber-warn: #ffe3b3;
+  --color-red-alert: #ffb3b3;
+  --neon-green: #a3ffc1;
+  --neon-orange: #ffe39a;
+  --neon-cyan: #b3e6ff;
+  --panel-bg: #fffafc;
+  --birthday-gradient: linear-gradient(90deg, #ffe3b3 0%, #ffb6ec 50%, #b3e6ff 100%);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-main);
+  font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+  transition: background 0.3s, color 0.3s;
+}
+
+header, nav, .deck-panel, .deck-console, .activity-log {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(10px);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.text-glow-cyan { text-shadow: 0 0 5px var(--color-cyan-glow), 0 0 10px var(--color-cyan-glow); }
+.text-glow-amber { text-shadow: 0 0 5px var(--color-amber-warn); }
+.text-glow-red { text-shadow: 0 0 5px var(--color-red-alert); }
+
+.birthday-gradient {
+  background: var(--birthday-gradient);
+  color: #3d155f;
+  border-radius: var(--border-radius);
+  padding: 1em;
+  font-weight: bold;
+  box-shadow: 0 1px 10px #ffb6ec66;
+}
+
+.theme-toggle-btn {
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  z-index: 50;
+  background: var(--panel-bg);
+  color: var(--neon-cyan);
+  border: 2px solid var(--border-color);
+  border-radius: 100px;
+  padding: 0.4em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+body.lightmode .theme-toggle-btn {
+  background: #fffafc;
+  color: #ffb6ec;
+  border-color: #ffb6ec;
+}
+.theme-toggle-btn:focus {
+  outline: 2px solid var(--color-cyan-glow);
+}
