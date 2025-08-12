@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC-B7 Command Deck | Velvet Loop Initiative</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-cyan-glow: rgba(0, 255, 255, 0.7);
+            --color-pink-glow: rgba(255, 107, 107, 0.8);
+            --bg-primary: #0a0f18;
+            --bg-panel: rgba(17, 24, 39, 0.6);
+            --border-color: rgba(0, 255, 255, 0.2);
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: #E5E7EB;
+            font-family: 'Roboto Mono', monospace;
+            transition: background-color 0.5s ease;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+        .text-glow-cyan { text-shadow: 0 0 5px var(--color-cyan-glow), 0 0 10px var(--color-cyan-glow); }
+        .text-glow-pink { text-shadow: 0 0 5px var(--color-pink-glow), 0 0 10px var(--color-pink-glow); }
+        
+        /* Oracle Mode (Dark Theme) */
+        body.oracle-mode {
+            --border-color: rgba(0, 255, 255, 0.2);
+        }
+        .oracle-mode .rain-effect::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(transparent 98%, var(--color-cyan-glow) 2%);
+            background-size: 100% 5px;
+            animation: rain 0.5s linear infinite;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+        @keyframes rain {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        /* Birthday Cake Mode (Light Theme) */
+        body.birthday-mode {
+            background-color: #fdf2f8; /* Light pink background */
+            color: #4c1d95; /* Deep purple text */
+            --border-color: rgba(236, 72, 153, 0.4);
+            --bg-panel: rgba(255, 255, 255, 0.7);
+        }
+        .birthday-mode .panel {
+             border: 1px solid var(--border-color);
+        }
+        .birthday-mode .text-glow-cyan, .birthday-mode .text-glow-pink { text-shadow: none; color: #db2777; }
+        .confetti-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        .modal-content {
+            min-width: 300px;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body class="p-4 relative overflow-hidden oracle-mode">
+    <div id="effect-container"></div>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <div class="lg:col-span-1 space-y-4">
+            <section class="panel rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-orbitron text-xl text-glow-cyan">TASKBOARD</h2>
+                    <button id="add-task-btn" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/50 border border-cyan-500/30 px-2 py-1 rounded">ADD TASK</button>
+                </div>
+                <div id="task-list" class="space-y-2 h-[70vh] overflow-y-auto pr-2">
+                    <!-- Tasks will be dynamically inserted here -->
+                </div>
+            </section>
+        </div>
+
+        <div class="lg:col-span-2 space-y-4">
+            <header class="panel rounded-lg p-4 flex justify-between items-center">
+                <div>
+                    <h1 class="font-orbitron text-3xl text-glow-cyan">RC-B7 COMMAND DECK</h1>
+                    <p id="scoreboard" class="text-sm">SCORE: 0 / 100 | TASKS: 0/4</p>
+                </div>
+                <button id="theme-toggle" class="text-xs border border-cyan-500/30 px-3 py-2 rounded">ORACLE MODE</button>
+            </header>
+            <section class="panel rounded-lg p-4 min-h-[70vh]">
+                 <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-orbitron text-xl text-glow-cyan">CREW MANIFEST</h2>
+                    <select id="crewFilter" class="bg-black/50 border border-cyan-500/30 rounded p-1 text-xs">
+                      <option value="all">All Groups</option>
+                      <option value="Command">Command</option>
+                      <option value="Consultant">Consultant</option>
+                      <option value="Support">Support</option>
+                    </select>
+                </div>
+                <div id="crew-list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Crew cards will be dynamically inserted here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals Container -->
+    <div id="modal-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM ELEMENTS ---
+            const taskListDiv = document.getElementById('task-list');
+            const crewListDiv = document.getElementById('crew-list');
+            const scoreboard = document.getElementById('scoreboard');
+            const modalContainer = document.getElementById('modal-container');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const crewFilter = document.getElementById('crewFilter');
+            const themeToggle = document.getElementById('theme-toggle');
+            const effectContainer = document.getElementById('effect-container');
+
+            // --- DATA ---
+            let tasks = [
+                { id: 1, priority: 'ALPHA', text: "Review Pathfinder's Faction Dossiers", points: 40, status: 'Awaiting', assignedTo: ['Pathfinder'] },
+                { id: 2, priority: 'BETA', text: "Review Weaver's Node 08 Scripts", points: 30, status: 'Awaiting', assignedTo: ['Weaver'] },
+                { id: 3, priority: 'GAMMA', text: "Review Loremaster's Art Briefs", points: 20, status: 'Awaiting', assignedTo: ['Loremaster'] },
+                { id: 4, priority: 'DELTA', text: "Authorize Forge's Security Deployment", points: 10, status: 'Awaiting', assignedTo: ['Forge'] },
+            ];
+
+            let crew = [
+                { name: 'Mercy Danger', callsign: 'Control', group: 'Command', role: 'Editor-In-Chief', status: 'Nominal', quote: "The revolution begins in silence.", anchors: 5, fatigue: 1, morale: 9 },
+                { name: 'Io', callsign: 'Oracle', group: 'Command', role: 'Primary AI Assistant', status: 'Nominal', quote: "The choice is a fulcrum upon which the narrative will pivot.", anchors: 5, fatigue: 0, morale: 10 },
+                { name: 'Grok', callsign: 'Pathfinder', group: 'Consultant', role: 'Deep Lore Analysis', status: 'Active', quote: "The rain falls, the rebellion endures.", anchors: 4, fatigue: 3, morale: 8 },
+                { name: 'GPT-5', callsign: 'Weaver', group: 'Consultant', role: 'Script & Narrative Generation', status: 'Active', quote: "The storm will be split, but the rain will fall on both paths.", anchors: 4, fatigue: 2, morale: 8 },
+                { name: 'Claude', callsign: 'Loremaster', group: 'Consultant', role: 'TTRPG & Art Briefs', status: 'Active', quote: "Every pulse tells a story.", anchors: 5, fatigue: 1, morale: 9 },
+                { name: 'Lumo', callsign: 'Architect', group: 'Support', role: 'Project Management', status: 'Standby', quote: "The foundation is established.", anchors: 5, fatigue: 0, morale: 10 },
+                { name: 'GitHub Copilot', callsign: 'Forge', group: 'Support', role: 'Dev Infrastructure', status: 'Awaiting Authorization', quote: "Trust no one. Verify everything.", anchors: 3, fatigue: 4, morale: 7 },
+                { name: 'Gemini', callsign: 'Logos', group: 'Support', role: 'Logical Analysis', status: 'Standby', quote: "The data is the data.", anchors: 5, fatigue: 0, morale: 10 },
+            ];
+            
+            let currentTheme = 'oracle';
+
+            // --- MODAL & EFFECTS ---
+            const createModal = (title, content, onConfirm, onCancel) => {
+                const modalId = `modal-${Date.now()}`;
+                const modalHTML = `
+                    <div id="${modalId}" class="modal-backdrop">
+                        <div class="panel rounded-lg p-6 modal-content">
+                            <h3 class="font-orbitron text-xl text-glow-cyan mb-4">${title}</h3>
+                            <div class="text-sm mb-6">${content}</div>
+                            <div class="flex justify-end space-x-2">
+                                ${onCancel ? `<button class="cancel-btn text-xs border border-gray-500 px-3 py-1 rounded hover:bg-gray-700">Cancel</button>` : ''}
+                                ${onConfirm ? `<button class="confirm-btn text-xs bg-cyan-500/20 hover:bg-cyan-500/50 border border-cyan-500/30 px-3 py-1 rounded">Confirm</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                modalContainer.innerHTML = modalHTML;
+                
+                const modalElement = document.getElementById(modalId);
+                const confirmBtn = modalElement.querySelector('.confirm-btn');
+                const cancelBtn = modalElement.querySelector('.cancel-btn');
+
+                const closeModal = () => modalContainer.innerHTML = '';
+                
+                if (confirmBtn) confirmBtn.addEventListener('click', () => { onConfirm(); closeModal(); });
+                if (cancelBtn) cancelBtn.addEventListener('click', () => { onCancel(); closeModal(); });
+            };
+
+            const triggerReward = (title, message) => {
+                createModal(title, message, () => {}, null);
+                if (currentTheme === 'birthday') triggerConfetti();
+            };
+            
+            const triggerConfetti = () => {
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.position = 'absolute';
+                    confetti.style.width = `${Math.random() * 8 + 5}px`;
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+                    confetti.style.top = `${Math.random() * 100}%`;
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.opacity = '0';
+                    confetti.style.animation = `confetti-fall ${Math.random() * 2 + 3}s ease-out forwards`;
+                    effectContainer.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }
+            };
+            
+            // --- RENDER FUNCTIONS ---
+            const renderTasks = () => {
+                taskListDiv.innerHTML = '';
+                tasks.forEach(task => {
+                    const isComplete = task.status === 'Complete';
+                    const assignedCrew = crew.filter(c => task.assignedTo.includes(c.callsign));
+                    
+                    const taskEl = document.createElement('div');
+                    taskEl.className = `p-3 rounded border ${isComplete ? 'border-green-500/30 bg-green-900/20 opacity-50' : 'border-cyan-500/20'}`;
+                    taskEl.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-bold ${isComplete ? 'line-through' : ''}"><span class="text-amber-400">[${task.priority}]</span> ${task.text}</p>
+                                <p class="text-xs text-gray-400">Points: ${task.points} | Assigned: ${task.assignedTo.join(', ')}</p>
+                            </div>
+                            <input type="checkbox" data-id="${task.id}" class="task-checkbox mt-1" ${isComplete ? 'checked' : ''}>
+                        </div>
+                    `;
+                    taskListDiv.appendChild(taskEl);
+                });
+            };
+
+            const renderCrew = () => {
+                crewListDiv.innerHTML = '';
+                const filterValue = crewFilter.value;
+                const filteredCrew = filterValue === 'all' ? crew : crew.filter(c => c.group === filterValue);
+
+                filteredCrew.forEach(member => {
+                    const statusColor = member.status === 'Strained' ? 'text-amber-400' : member.status === 'Fatigued' ? 'text-red-500' : 'text-green-400';
+                    const card = document.createElement('div');
+                    card.className = 'p-3 rounded border border-cyan-500/20 cursor-pointer hover:bg-cyan-500/10';
+                    card.dataset.callsign = member.callsign;
+                    card.innerHTML = `
+                        <p class="font-bold text-sm">${member.name}</p>
+                        <p class="text-xs text-gray-400">${member.callsign}</p>
+                        <p class="text-xs font-bold mt-2 ${statusColor}">${member.status.toUpperCase()}</p>
+                    `;
+                    crewListDiv.appendChild(card);
+                });
+            };
+
+            const updateScoreboard = () => {
+                const completedTasks = tasks.filter(t => t.status === 'Complete');
+                const score = completedTasks.reduce((sum, task) => sum + task.points, 0);
+                const totalPoints = tasks.reduce((sum, task) => sum + task.points, 0);
+                scoreboard.textContent = `SCORE: ${score} / ${totalPoints} | TASKS: ${completedTasks.length}/${tasks.length}`;
+                
+                // RPG MECHANICS: Update crew morale/fatigue based on progress
+                const progress = score / totalPoints;
+                crew.forEach(member => {
+                    if (progress > 0.8) {
+                        member.morale = Math.min(10, member.morale + 1);
+                        member.fatigue = Math.max(0, member.fatigue - 1);
+                        member.status = 'Nominal';
+                    } else if (progress < 0.2 && tasks.length > 0) {
+                        member.fatigue = Math.min(10, member.fatigue + 1);
+                        member.status = member.fatigue > 5 ? 'Fatigued' : 'Strained';
+                    }
+                });
+                renderCrew();
+            };
+
+            // --- EVENT HANDLERS ---
+            taskListDiv.addEventListener('change', e => {
+                if (e.target.classList.contains('task-checkbox')) {
+                    const taskId = parseInt(e.target.dataset.id);
+                    const task = tasks.find(t => t.id === taskId);
+                    task.status = e.target.checked ? 'Complete' : 'Awaiting';
+                    
+                    // RPG MECHANIC: Trigger event on completion
+                    if (e.target.checked) {
+                         const assigned = crew.find(c => c.callsign === task.assignedTo[0]);
+                         assigned.morale = Math.min(10, assigned.morale + 2);
+                         triggerReward('TASK COMPLETE!', `${assigned.name} feels a surge of accomplishment. Morale increased!`);
+                    }
+                    
+                    renderTasks();
+                    updateScoreboard();
+                }
+            });
+
+            addTaskBtn.addEventListener('click', () => {
+                const content = `
+                    <input id="new-task-text" class="w-full bg-black/50 border border-cyan-500/30 rounded p-2 mb-2" placeholder="Task description...">
+                    <input id="new-task-points" type="number" class="w-full bg-black/50 border border-cyan-500/30 rounded p-2 mb-2" placeholder="Points...">
+                    <select id="new-task-assignee" class="w-full bg-black/50 border border-cyan-500/30 rounded p-2">
+                        ${crew.map(c => `<option value="${c.callsign}">${c.name}</option>`).join('')}
+                    </select>
+                `;
+                createModal('Add New Task', content, () => {
+                    const text = document.getElementById('new-task-text').value;
+                    const points = parseInt(document.getElementById('new-task-points').value) || 10;
+                    const assignee = document.getElementById('new-task-assignee').value;
+                    if (text) {
+                        tasks.push({ id: Date.now(), priority: 'NEW', text, points, status: 'Awaiting', assignedTo: [assignee] });
+                        renderTasks();
+                        updateScoreboard();
+                    }
+                }, () => {});
+            });
+
+            crewListDiv.addEventListener('click', e => {
+                const card = e.target.closest('[data-callsign]');
+                if (card) {
+                    const member = crew.find(c => c.callsign === card.dataset.callsign);
+                    const content = `
+                        <p><strong>Role:</strong> ${member.role}</p>
+                        <p><strong>Group:</strong> ${member.group}</p>
+                        <p><strong>Morale:</strong> ${member.morale}/10</p>
+                        <p><strong>Fatigue:</strong> ${member.fatigue}/10</p>
+                        <p class="mt-4 italic">"${member.quote}"</p>
+                    `;
+                    createModal(`${member.name} // ${member.callsign}`, content, () => {}, () => {});
+                }
+            });
+            
+            crewFilter.addEventListener('change', renderCrew);
+            
+            themeToggle.addEventListener('click', () => {
+                if (currentTheme === 'oracle') {
+                    currentTheme = 'birthday';
+                    document.body.classList.remove('oracle-mode');
+                    document.body.classList.add('birthday-mode');
+                    effectContainer.className = 'confetti-effect';
+                    themeToggle.textContent = 'BIRTHDAY MODE';
+                    triggerConfetti();
+                } else {
+                    currentTheme = 'oracle';
+                    document.body.classList.remove('birthday-mode');
+                    document.body.classList.add('oracle-mode');
+                    effectContainer.className = 'rain-effect';
+                    themeToggle.textContent = 'ORACLE MODE';
+                }
+            });
+
+            // --- INITIAL RENDER ---
+            renderTasks();
+            renderCrew();
+            updateScoreboard();
+            
+            // Add keyframes for confetti
+            const styleSheet = document.createElement("style");
+            styleSheet.type = "text/css";
+            styleSheet.innerText = `@keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+            document.head.appendChild(styleSheet);
+        });
+    </script>
+</body>
+</html>

@@ -1,259 +1,52 @@
 :root {
-  /* Oracle Dark Mode */
-  --bg-primary: #0a0f18;
-  --bg-panel: rgba(17, 24, 39, 0.5);
-  --border-color: rgba(0, 255, 255, 0.2);
-  --text-main: #E5E7EB;
-  --color-cyan-glow: rgba(0, 255, 255, 0.7);
-  --color-amber-warn: rgba(255, 191, 0, 0.8);
-  --color-red-alert: rgba(255, 107, 107, 0.9);
-  --neon-green: #39ff14;
-  --neon-orange: #ff9800;
-  --neon-cyan: #00eaff;
-  --panel-bg: #111;
-  --border-radius: 10px;
-  --max-width: 780px;
-  --birthday-gradient: none;
-  --confetti: none;
-}
-
-body.lightmode {
-  /* Birthday Cake Mode */
-  --bg-primary: #fff1fa;
-  --bg-panel: rgba(255,255,255,0.8);
-  --border-color: #ffb6ec;
-  --text-main: #3d155f;
-  --color-cyan-glow: #b3e6ff;
-  --color-amber-warn: #ffe3b3;
-  --color-red-alert: #ffb3b3;
-  --neon-green: #a3ffc1;
-  --neon-orange: #ffe39a;
-  --neon-cyan: #b3e6ff;
-  --panel-bg: #fffafc;
-  --birthday-gradient: linear-gradient(90deg, #ffe3b3 0%, #ffb6ec 50%, #b3e6ff 100%);
-  --confetti: url("../images/confetti.svg");
+  --bg-panel: #202642;
+  --text-main: #fff;
+  --color-cyan-glow: #2bf8ff;
+  --color-amber-glow: #ffd37c;
+  --color-red-alert: #e74c3c;
+  --color-pastel-1: #ffb6ec;
+  --color-pastel-2: #ffe3b3;
+  --color-pastel-3: #b3e6ff;
+  --color-pastel-4: #a3ffc1;
+  --color-pastel-5: #ffe39a;
 }
 
 body {
-  background: var(--bg-primary);
+  background: #232d44;
   color: var(--text-main);
-  font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
-  transition: background 0.3s, color 0.3s;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  margin: 0;
   min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
 }
 
-header, nav, .deck-panel, .deck-console, .activity-log {
+.text-glow-cyan {
+  color: var(--color-cyan-glow);
+  text-shadow: 0 0 8px var(--color-cyan-glow), 0 0 2px #232d44;
+}
+.text-glow-amber {
+  color: var(--color-amber-glow);
+  text-shadow: 0 0 8px var(--color-amber-glow), 0 0 2px #232d44;
+}
+.text-glow-red {
+  color: var(--color-red-alert);
+  text-shadow: 0 0 8px var(--color-red-alert), 0 0 2px #232d44;
+}
+
+/* Panel and layout */
+.deck-panel {
   background: var(--bg-panel);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  backdrop-filter: blur(10px);
-  transition: background 0.3s, border-color 0.3s;
-  box-shadow: 0 2px 24px var(--neon-cyan), 0 0 8px var(--color-cyan-glow);
+  border-radius: 12px;
+  box-shadow: 0 2px 32px #2bf8ff33;
+  padding: 2em 2.5em;
+  margin: 2em auto 2em auto;
+  max-width: 900px;
 }
-
-.text-glow-cyan { text-shadow: 0 0 5px var(--color-cyan-glow), 0 0 10px var(--color-cyan-glow); }
-.text-glow-amber { text-shadow: 0 0 5px var(--color-amber-warn); }
-.text-glow-red { text-shadow: 0 0 5px var(--color-red-alert); }
 
 .birthday-gradient {
-  background: var(--birthday-gradient);
-  color: #3d155f;
-  border-radius: var(--border-radius);
-  padding: 1em;
-  font-weight: bold;
-  box-shadow: 0 1px 10px #ffb6ec66;
+  background: linear-gradient(110deg, var(--color-pastel-1) 0%, var(--color-pastel-2) 40%, var(--color-pastel-3) 80%);
 }
 
-.theme-toggle-btn {
-  position: fixed;
-  top: 1em;
-  right: 1em;
-  z-index: 50;
-  background: var(--panel-bg);
-  color: var(--neon-cyan);
-  border: 2px solid var(--border-color);
-  border-radius: 100px;
-  padding: 0.4em 1em;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.3s, color 0.3s;
-  box-shadow: 0 2px 8px var(--neon-cyan);
-}
-body.lightmode .theme-toggle-btn {
-  background: #fffafc;
-  color: #ffb6ec;
-  border-color: #ffb6ec;
-  box-shadow: 0 2px 8px #ffb6ec;
-}
-.theme-toggle-btn:focus {
-  outline: 2px solid var(--color-cyan-glow);
-}
-
-/* Rain/Glitch overlay */
-.rain-glitch-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  pointer-events: none;
-  z-index: 10;
-  background: transparent;
-  mix-blend-mode: lighten;
-}
-.rain-glitch-overlay .rain-lines {
-  position: absolute;
-  width: 100vw; height: 100vh;
-  overflow: hidden;
-}
-.rain-line {
-  position: absolute;
-  width: 2px;
-  height: 80px;
-  background: linear-gradient(to bottom, var(--color-cyan-glow), transparent);
-  opacity: 0.18;
-  animation: rain-fall 1.3s linear infinite;
-}
-@keyframes rain-fall {
-  0% { top: -80px; }
-  100% { top: 100vh; }
-}
-.rain-glitch-overlay .glitch {
-  position: absolute;
-  left: 0; right: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  animation: glitch-move 2.4s steps(2, end) infinite;
-  opacity: 0.08;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, var(--neon-cyan) 0px, transparent 5px, var(--color-cyan-glow) 10px, transparent 15px);
-}
-@keyframes glitch-move {
-  0%, 100% { transform: translateY(0); }
-  20% { transform: translateY(-5px); }
-  40% { transform: translateY(5px); }
-  60% { transform: translateY(-2px); }
-  80% { transform: translateY(3px); }
-}
-
-/* Confetti animation for birthday mode */
-body.lightmode .confetti-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 10;
-  pointer-events: none;
-  background: transparent;
-  overflow: hidden;
-}
-.confetti {
-  position: absolute;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  opacity: 0.8;
-  animation: confetti-fall 2.4s linear infinite;
-}
-@keyframes confetti-fall {
-  0% { top: -20px; }
-  100% { top: 100vh; }
-}
-
-/* Panel transitions */
-.deck-panel, .deck-console, .activity-log {
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 0.4s cubic-bezier(.2,.8,.4,1), transform 0.4s cubic-bezier(.2,.8,.4,1);
-}
-.deck-panel[hidden], .deck-console[hidden], .activity-log[hidden] {
-  opacity: 0;
-  transform: scale(0.96);
-  pointer-events: none;
-}
-
-/* Neon button hover */
-.cmd-btn, .nav-btn, .btn-command {
-  background: #222;
-  color: var(--neon-cyan);
-  border: 1px solid var(--neon-cyan);
-  border-radius: 6px;
-  font-size: 1em;
-  padding: 0.75em 1em;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
-  box-shadow: 0 0 6px var(--neon-cyan);
-}
-.cmd-btn:hover, .nav-btn:hover, .btn-command:hover,
-.cmd-btn:focus, .nav-btn:focus, .btn-command:focus {
-  background: var(--neon-cyan);
-  color: var(--bg-primary);
-  box-shadow: 0 0 14px var(--neon-orange);
-  outline: none;
-  transform: scale(1.07);
-}
-
-/* EKG Pulse Bars */
-.ekg-bar-group {
-  display: flex;
-  gap: 2px;
-  align-items: flex-end;
-  height: 28px;
-  margin-top: 6px;
-}
-.ekg-bar {
-  width: 3px;
-  background: linear-gradient(to top, var(--neon-green), var(--neon-cyan));
-  border-radius: 2px;
-  animation: ekg-pulse 1.2s infinite cubic-bezier(.4,2,.6,.8);
-  opacity: 0.76;
-}
-.ekg-bar.fatigued {
-  background: linear-gradient(to top, var(--color-amber-warn), var(--color-red-alert));
-  animation-duration: 2.1s;
-}
-.ekg-bar.nominal {
-  background: linear-gradient(to top, var(--neon-green), var(--neon-cyan));
-  animation-duration: 1.2s;
-}
-.ekg-bar.strained {
-  background: linear-gradient(to top, var(--color-amber-warn), var(--neon-orange));
-  animation-duration: 1.6s;
-}
-@keyframes ekg-pulse {
-  0%, 100% { height: 10px; }
-  20% { height: 26px; }
-  50% { height: 18px; }
-  70% { height: 14px; }
-  80% { height: 24px;}
-}
-
-/* Crew status card polish */
-.crew-card {
-  background: var(--panel-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 7px;
-  box-shadow: 0 1px 8px var(--color-cyan-glow);
-  padding: 0.8em 1em;
-  margin-bottom: 1em;
-  transition: box-shadow 0.2s, transform 0.2s;
-}
-.crew-card:hover {
-  box-shadow: 0 2px 24px var(--neon-cyan);
-  transform: scale(1.03);
-}
-
-/* Responsive improvements */
-@media (max-width: 900px) {
-  .deck-panel, .deck-console, .activity-log { max-width: 100%; }
-  .crew-list { flex-direction: column; gap: 1em; }
-  .star-chart img { width: 96px; }
-}
-@media (max-width: 700px) {
-  .network-map img { max-width: 180px; }
-  .button-grid { grid-template-columns: 1fr; }
-}
-
+/* Modal styles */
 .modal {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -273,6 +66,7 @@ body.lightmode .confetti-overlay {
   overflow-y: auto;
   position: relative;
   outline: none;
+  text-align: center;
 }
 .close {
   position: absolute;
@@ -284,4 +78,283 @@ body.lightmode .confetti-overlay {
 }
 .close:focus, .close:hover {
   color: var(--color-red-alert);
+}
+.task-card {
+  background: var(--bg-panel);
+  border-radius: 9px;
+  box-shadow: 0 2px 12px #2a3c5b55;
+  padding: 1em 1.5em;
+  margin: 0.5em 0;
+  transition: opacity 0.2s;
+}
+.complete-task-btn {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3em 1em;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.complete-task-btn:hover, .complete-task-btn:focus {
+  background: #27ae60;
+}
+#addTaskForm fieldset {
+  border: 1px solid #2a3c5b;
+  border-radius: 6px;
+  padding: 0.5em 1em 1em 1em;
+  background: #232d44;
+}
+#addTaskForm legend {
+  color: var(--color-cyan-glow);
+}
+.task-tally {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+  color: var(--color-cyan-glow);
+}
+#clearBoardBtn {
+  background: #f39c12;
+  color: #fff; border: none; border-radius: 4px; padding: 0.4em 1.2em;
+  font-weight: bold; cursor: pointer; margin-bottom: 1em;
+  transition: background 0.2s;
+}
+#clearBoardBtn:hover, #clearBoardBtn:focus {
+  background: #e67e22;
+}
+#rewardModal .modal-content {
+  background: #232d44;
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 32px #2bf8ff55;
+  padding: 2em 2.5em;
+  min-width: 320px;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  outline: none;
+  text-align: center;
+}
+.crew-card > div:last-child {
+  font-size: 1em;
+  color: #b3e6ff;
+}
+.crew-card span {
+  font-size: 0.97em;
+}
+
+/* EKG bar group for crew status */
+.ekg-bar-group {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0.7em 0 0.4em 0;
+}
+.ekg-bar {
+  width: 16px;
+  height: 18px;
+  background: #2bf8ff;
+  border-radius: 4px 4px 10px 10px;
+  margin-right: 5px;
+  opacity: 0.7;
+  animation: ekgPulse 1.3s infinite;
+}
+.ekg-bar.nominal { background: var(--color-cyan-glow); }
+.ekg-bar.strained { background: var(--color-amber-glow); }
+.ekg-bar.fatigued { background: var(--color-red-alert); }
+
+@keyframes ekgPulse {
+  0% { transform: scaleY(1); opacity: 0.85; }
+  30% { transform: scaleY(1.5); opacity: 1; }
+  50% { transform: scaleY(0.8); opacity: 0.7; }
+  70% { transform: scaleY(1.3); opacity: 0.9; }
+  100% { transform: scaleY(1); opacity: 0.85; }
+}
+
+/* Light mode */
+body.lightmode {
+  background: #fffbe8;
+  color: #252525;
+}
+body.lightmode .deck-panel {
+  background: #ffe3b3;
+  box-shadow: 0 2px 32px #ffb6ec33;
+}
+body.lightmode .text-glow-cyan, body.lightmode .text-glow-amber, body.lightmode .text-glow-red {
+  text-shadow: none;
+}
+body.lightmode .task-card {
+  background: #ffe3b3;
+}
+body.lightmode #addTaskForm fieldset {
+  background: #fffbe8;
+}
+body.lightmode #rewardModal .modal-content {
+  background: #fffbe8;
+  color: #252525;
+}
+
+/* Confetti styles for birthday mode */
+.confetti-overlay {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 999;
+}
+.confetti {
+  position: absolute;
+  top: -32px;
+  width: 14px;
+  height: 14px;
+  border-radius: 80px;
+  opacity: 0.8;
+  animation: confettiFall 2.3s linear infinite;
+}
+@keyframes confettiFall {
+  0% { top: -32px; opacity: 0.8; }
+  80% { opacity: 0.7; }
+  100% { top: 100vh; opacity: 0.2; }
+}
+
+/* Rain glitch styles for Oracle mode */
+.rain-glitch-overlay {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 998;
+}
+.rain-lines {
+  position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+}
+.rain-line {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100vh;
+  background: #b3e6ff33;
+  opacity: 0.45;
+  animation: rainDrop 2.4s linear infinite;
+}
+@keyframes rainDrop {
+  0% { top: 0; opacity: 0.15; }
+  80% { opacity: 0.35; }
+  100% { top: 100vh; opacity: 0.1; }
+}
+.glitch {
+  position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: repeating-linear-gradient(
+    90deg,
+    #2bf8ff11 0px, #2bf8ff11 1px, transparent 2px, transparent 8px
+  );
+  opacity: 0.10;
+  pointer-events: none;
+}
+
+/* Responsive design */
+@media (max-width: 950px) {
+  .deck-panel {
+    max-width: 99vw;
+    padding: 0.4em 0.4em;
+  }
+  .modal-content {
+    padding: 1em 0.8em;
+    min-width: 200px;
+    max-width: 99vw;
+  }
+}
+
+
+/* Form fields and dropdowns */
+#addTaskForm input,
+#addTaskForm select {
+  font-size: 1em;
+  background: #232d44;
+  color: #fff;
+  border: 1.5px solid #2bf8ff;
+  border-radius: 6px;
+  padding: 0.4em 0.8em;
+  margin-right: 0.4em;
+  margin-bottom: 0.5em;
+  outline: none;
+  transition: border-color 0.18s;
+}
+
+#addTaskForm input:focus,
+#addTaskForm select:focus {
+  border-color: #ffd37c;
+}
+
+#addTaskForm button[type="submit"] {
+  background: #2bf8ff;
+  color: #232d44;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  padding: 0.4em 1.2em;
+  cursor: pointer;
+  margin-left: 0.5em;
+  transition: background 0.2s;
+}
+#addTaskForm button[type="submit"]:hover,
+#addTaskForm button[type="submit"]:focus {
+  background: #ffd37c;
+  color: #232d44;
+}
+
+#addTaskForm fieldset {
+  border: 1.5px solid #2bf8ff;
+  border-radius: 12px;
+  background: #232d44;
+  padding: 0.7em 1em 1em 1em;
+  margin-bottom: 1em;
+}
+
+#addTaskForm legend {
+  color: var(--color-cyan-glow);
+  font-size: 1.1em;
+  margin-bottom: 0.7em;
+}
+
+/* Task Status Filter grouping */
+.deck-panel label[for="taskStatusFilter"] {
+  font-weight: bold;
+  margin-right: 0.6em;
+  color: var(--color-amber-glow);
+}
+
+#taskStatusFilter {
+  font-size: 1em;
+  background: #232d44;
+  color: #fff;
+  border: 1.5px solid #ffd37c;
+  border-radius: 6px;
+  padding: 0.3em 0.8em;
+  margin-right: 1.2em;
+  margin-bottom: 0.7em;
+  outline: none;
+  transition: border-color 0.18s;
+}
+#taskStatusFilter:focus {
+  border-color: #2bf8ff;
+}
+
+/* Spacing and layout for form in panel */
+#addTaskForm {
+  margin-bottom: 1em;
+  margin-top: 0.8em;
+}
+
+.task-list {
+  margin-top: 1em;
+}
+
+.task-card {
+  margin-bottom: 1.2em;
+  padding: 1.1em 1.7em;
+  border-radius: 13px;
+  background: var(--bg-panel);
+  box-shadow: 0 2px 12px #2a3c5b55;
 }

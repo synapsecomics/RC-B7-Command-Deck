@@ -1,35 +1,61 @@
-# RC-B7 Command Deck
+# RC-B7 Command Deck & Velvet Loop Initiative
 
-**Velvet Loop Initiative — Command Deck UI**
+## 🚀 Announcements — August 2025
 
-## 🚀 Features
-
-- **Crew Manifest Integration:**  
-  All crew listed in the manifest (leadership, agents, rogue elements) are dynamically rendered in the UI.
-- **Live EKG Pulse & Status:**  
-  Each crew member has a live-updating status indicator (Nominal, Strained, Fatigued) with animated pulse bars.
-- **Filtering by Crew Group:**  
-  Use the dropdown to filter by Leadership, Agents, or Rogue Element.
-- **Clickable Crew Cards:**  
-  Click (or press Enter) on any crew card to open a modal with full role, assignment, quote, and lore details. Keyboard accessible; close with Escape, click-out, or ×.
-- **Story Event Status Wiring:**  
-  Crew status is now responsive to story events (e.g. “Complete Claude Briefing” sets Claude’s status to Nominal). Easily extendable for future narrative triggers.
-- **Oracle Mode & Birthday Cake Mode:**  
-  Sci-fi rain/glitch overlay in dark mode; pastel confetti sprinkles in light mode.
-
-## 🛠 How to Test
-
-1. **Run locally or deploy on GitHub Pages.**
-2. Use the filter dropdown above the crew list to change visible crew groups.
-3. Click or keyboard-select any crew card for a detail modal.
-4. Watch crew status update live, and see status changes triggered by story events (demo event fires after 8s).
-5. Toggle between Oracle and Cake modes with the top-right theme button.
-
-## 🧑‍💻 Developer Notes
-
-- Crew manifest is defined in `scripts/script.js` for local testing; can be loaded via fetch for production.
-- Story events are stubbed as an array of triggerable actions.  
-- UI is fully keyboard-accessible, and responsive for mobile.
-- Easily extensible for log events, ARG hooks, and future narrative integration.
+- **RPG Mode Activated!**  
+  All crew status, morale, and fatigue now update live as you complete tasks, clear the board, or trigger story events. Every decision affects crew mood, risk, and narrative flavor text.
+- **Birthday Cake Mode / Oracle Mode:**  
+  Toggle pastel confetti or sci-fi rain overlays with the Light/Dark mode button.
+- **Live Taskboard & Crew Linking:**  
+  Add, complete, and filter tasks. Point tally updates in real time. Crew assignments link directly to crew cards.
+- **Dynamic Rewards & Fun Events:**  
+  Completing tasks or clearing the board triggers morale-boosting events, quotes, and badges. Crew respond to your actions like a true TTRPG party!
+- **Accessible, Responsive UI:**  
+  Keyboard and mobile-friendly. Modal dialogs for crew and rewards. Glowing headers, gradients, and animated EKG status bars.
 
 ---
+
+## Features
+
+- **Crew Manifest Integration** — All crew (leadership, agents, rogue elements) dynamically rendered.  
+- **EKG Pulse & Status** — Real-time status indicators with animated pulse.
+- **Taskboard** — Priority, points, assignment, completion, and filtering.
+- **RPG Decision System** — Morale, fatigue, anchor points, and quotes change based on your actions.
+- **Story Event Triggers** — Narrative events update crew state and UI.
+- **Theme Modes** — Oracle rain glitch for dark, Birthday Cake confetti for light.
+- **Accessible Modals** — Crew detail, event reward, and more.
+
+---
+
+## How To Use
+
+1. **Add or Complete Tasks:**  
+   See points and completion tally update live.
+2. **Interact With Crew:**  
+   Click or keyboard-select crew cards for status, role, and dynamic quote.
+3. **Trigger Events:**  
+   Clear the board or complete tasks to unlock crew reactions and event modals.
+4. **Switch Modes:**  
+   Toggle Light/Dark mode for visual and thematic effects.
+
+---
+
+## Developer Notes
+
+- Crew manifest loaded from `script.js`.
+- All crew status/quotas update with gameplay actions for full RPG immersion.
+- Easily extendable: Add new story events, crew, or UI themes.
+- The UI uses CSS custom properties and is fully responsive.
+
+---
+
+## Recent Updates
+
+- **RPG Mode:** Crew morale/fatigue/anchor update with every action. Quotes and status are dynamic.
+- **Fun Events:** Reward modals and badges trigger on key completions.
+- **Form UI:** Task form and dropdowns styled to match sci-fi theme.
+- **Accessibility:** Improved modal and keyboard navigation.
+
+---
+
+**For feedback, issues, or lore submissions, contact @synapsecomics or open a GitHub Issue.**

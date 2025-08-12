@@ -23,7 +23,35 @@
       <p>This panel's background and UI will switch to pastel colors in light mode.</p>
     </section>
     <section class="deck-panel" style="margin-top:2em;">
-      <h2 class="text-glow-cyan">Crew Status</h2>
+      <h2 class="text-glow-cyan">Operational Task List</h2>
+      <div class="task-tally" style="margin-bottom:1em;"></div>
+      <button id="clearBoardBtn" style="margin-bottom:1em;">Clear Board</button>
+      <div style="margin-bottom:1em;">
+        <label for="taskStatusFilter" style="font-weight:bold;">Task Status Filter:</label>
+        <select id="taskStatusFilter">
+          <option value="all">All</option>
+          <option value="Awaiting">Awaiting</option>
+          <option value="Complete">Complete</option>
+        </select>
+      </div>
+      <form id="addTaskForm" style="margin-bottom:1em;">
+        <fieldset>
+          <legend style="font-weight:bold;">Add New Task</legend>
+          <input type="text" id="newTaskPriority" placeholder="Priority (e.g. ALPHA)" required style="width:8em;">
+          <input type="text" id="newTaskName" placeholder="Task Description" required style="width:22em;">
+          <input type="number" id="newTaskPoints" placeholder="Points" min="0" required style="width:6em;">
+          <input type="text" id="newTaskAssigned" placeholder="Assigned Crew (comma-separated)" required style="width:15em;">
+          <button type="submit" style="margin-left:1em;">Add Task</button>
+        </fieldset>
+      </form>
+      <div class="task-list"></div>
+      <div id="rewardModal" class="modal" style="display:none;">
+        <div class="modal-content" tabindex="0" aria-modal="true" role="dialog">
+          <span class="close" id="closeRewardModalBtn" tabindex="0" aria-label="Close">&times;</span>
+          <div id="rewardModalDetails"></div>
+        </div>
+      </div>
+      <h2 class="text-glow-cyan" style="margin-top:2em;">Crew Status</h2>
       <div style="margin-bottom:1em;">
         <label for="crewFilter" style="font-weight:bold;">Filter:</label>
         <select id="crewFilter">
@@ -34,14 +62,14 @@
         </select>
       </div>
       <div class="crew-list"></div>
-    </section>
-    <!-- Crew detail modal -->
-    <div id="crewModal" class="modal" style="display:none;">
-      <div class="modal-content" tabindex="0" aria-modal="true" role="dialog">
-        <span class="close" id="closeModalBtn" tabindex="0" aria-label="Close">&times;</span>
-        <div id="crewModalDetails"></div>
+      <!-- Crew detail modal -->
+      <div id="crewModal" class="modal" style="display:none;">
+        <div class="modal-content" tabindex="0" aria-modal="true" role="dialog">
+          <span class="close" id="closeModalBtn" tabindex="0" aria-label="Close">&times;</span>
+          <div id="crewModalDetails"></div>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
   <script src="scripts/script.js"></script>
 </body>
