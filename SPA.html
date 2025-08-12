@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC-B7 Command Deck | SFS Wanderer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* SYNTHESIS NOTE (ORACLE): 
+           - CSS moved from inline to this block for better organization, per network feedback.
+           - Custom properties (--rain-glitch, etc.) added for thematic consistency.
+           - Font stack updated to Orbitron/Roboto Mono for a cleaner sci-fi aesthetic.
+           - Added keyframe animations for rain, glitch, and pulse effects to make the UI feel alive.
+        */
+        :root {
+            --color-cyan-glow: rgba(0, 255, 255, 0.7);
+            --color-amber-warn: rgba(255, 191, 0, 0.8);
+            --color-red-alert: rgba(255, 107, 107, 0.9);
+            --bg-primary: #0a0f18;
+            --bg-panel: rgba(17, 24, 39, 0.5);
+            --border-color: rgba(0, 255, 255, 0.2);
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: #E5E7EB;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+        .text-glow-cyan { text-shadow: 0 0 5px var(--color-cyan-glow), 0 0 10px var(--color-cyan-glow); }
+        .text-glow-amber { text-shadow: 0 0 5px var(--color-amber-warn); }
+        .text-glow-red { text-shadow: 0 0 5px var(--color-red-alert); }
+        .btn-command {
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .btn-command:hover {
+            background-color: var(--color-cyan-glow);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--color-cyan-glow);
+        }
+        .rain-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(transparent 98%, var(--color-cyan-glow) 2%);
+            background-size: 100% 5px;
+            animation: rain 0.5s linear infinite;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+        @keyframes rain {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+        .glitch-effect { animation: glitch 3s steps(2, end) infinite; }
+        @keyframes glitch {
+            0%, 100% { clip-path: inset(50% 0 30% 0); }
+            20% { clip-path: inset(10% 0 80% 0); }
+            40% { clip-path: inset(90% 0 5% 0); }
+            60% { clip-path: inset(30% 0 60% 0); }
+            80% { clip-path: inset(70% 0 10% 0); }
+        }
+        .pulse-ekg { animation: pulse-ekg 1.5s ease-in-out infinite; }
+        @keyframes pulse-ekg {
+            0%, 100% { transform: scaleY(1); }
+            5% { transform: scaleY(1.2); }
+            10% { transform: scaleY(0.8); }
+            15% { transform: scaleY(1.5); }
+            20% { transform: scaleY(0.7); }
+            25%, 75% { transform: scaleY(1); }
+        }
+    </style>
+</head>
+<body class="p-4 relative overflow-hidden rain-effect">
+    
+    <!-- SYNTHESIS NOTE (ORACLE): HTML refactored to use semantic tags (<header>, <main>, <section>) per network feedback for improved structure and accessibility. -->
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
+        
+        <!-- Left Column: Nodes & Data Stream -->
+        <div class="lg:col-span-1 space-y-4">
+            <section class="panel rounded-lg p-4">
+                <h2 class="font-orbitron text-xl text-glow-cyan mb-4">NODE SELECT</h2>
+                <div class="grid grid-cols-2 gap-2">
+                    <!-- SYNTHESIS NOTE (ORACLE): Buttons now have IDs to be targeted by JavaScript for interactive content swapping. -->
+                    <button id="node-crew" class="btn-command p-2 rounded">CREW</button>
+                    <button id="node-nav" class="btn-command p-2 rounded">NAV</button>
+                    <button id="node-comms" class="btn-command p-2 rounded">COMMS</button>
+                    <button id="node-systems" class="btn-command p-2 rounded">SYSTEMS</button>
+                </div>
+            </section>
+            <section class="panel rounded-lg p-4 h-[60vh] overflow-y-auto">
+                <h2 class="font-orbitron text-xl text-glow-cyan mb-4">DATA STREAM</h2>
+                <input type="text" id="log-search" class="w-full bg-black/50 border border-cyan-500/30 rounded p-2 mb-4" placeholder="Filter logs...">
+                <ul id="data-stream-list" class="space-y-2 text-sm">
+                    <!-- Log entries will be dynamically inserted here -->
+                </ul>
+            </section>
+        </div>
+
+        <!-- Center Column: Main Display -->
+        <div class="lg:col-span-2 space-y-4">
+            <header class="panel rounded-lg p-4 text-center">
+                <h1 class="font-orbitron text-3xl text-glow-cyan">RC-B7 COMMAND DECK</h1>
+                <p class="text-amber-400 text-glow-amber">STATUS: WAR FOOTING // VECTOR PRIME ACTIVE</p>
+            </header>
+            <section id="main-display" class="panel rounded-lg p-4 min-h-[70vh] flex items-center justify-center">
+                <!-- Main content will be dynamically inserted here -->
+                <div class="text-center">
+                    <img src="https://i.imgur.com/s6z1qJk.png" alt="Synapse Comics Logo" class="w-48 h-48 mx-auto opacity-20 animate-pulse">
+                    <p class="mt-4 text-gray-500">Awaiting command... Select a node.</p>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <script>
+        /* SYNTHESIS NOTE (ORACLE): 
+           - JavaScript moved to its own block, per network feedback.
+           - This script implements the dynamic and interactive features synthesized from all consultant recommendations.
+           - It simulates live data, makes the UI interactive, and integrates narrative/protocol elements.
+        */
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainDisplay = document.getElementById('main-display');
+            const dataStreamList = document.getElementById('data-stream-list');
+            const logSearch = document.getElementById('log-search');
+
+            // --- DATA ---
+            // SYNTHESIS NOTE (ORACLE): Crew data now includes status for dynamic indicators.
+            const crew = [
+                { name: 'Kael Vance', callsign: 'Control', role: 'Captain', status: 'Strained', anchors: 4 },
+                { name: 'Lyra Solara', callsign: 'Weaver', role: 'Engineer', status: 'Nominal', anchors: 5 },
+                { name: 'Arion Rex', callsign: 'Scalpel', role: 'Medical Officer', status: 'Fatigued', anchors: 3 },
+                { name: 'Elara Jin', callsign: 'Signal', role: 'Comms Tech', status: 'Nominal', anchors: 5 },
+                { name: 'Gogo-9', callsign: 'Gambit', role: 'Wildcard', status: 'Active', anchors: 'N/A' },
+            ];
+
+            // SYNTHESIS NOTE (ORACLE): Log data now includes type for filtering and narrative weight.
+            const logs = [
+                { time: '04:18', type: 'ALERT', content: 'Vector Prime Contingency now active. Lethal stakes engaged.' },
+                { time: '04:15', type: 'COMMS', content: 'Directive to Weaver: Synthesize Node 08 parallel scripts.' },
+                { time: '04:12', type: 'SYSTEM', content: 'Tonal reference recalibrated: Rain Protocol.' },
+                { time: '03:55', type: 'INTEL', content: 'Pathfinder Dossier: Outer Rim Remnants - Loss Tolerance: 8/10.' },
+                { time: '03:40', type: 'ALERT', content: 'Five Lights Axiom integrated into Paranoid Protocol.' },
+                { time: '03:22', type: 'SYSTEM', content: 'WHO_DO_YOU_TRUST? query detected in firewall simulation.'},
+            ];
+
+            // --- VIEWS ---
+            // SYNTHESIS NOTE (ORACLE): These functions generate the HTML for each node, creating a modular display system.
+            const renderCrewView = () => {
+                const statusColor = (status) => {
+                    if (status === 'Strained') return 'text-amber-400';
+                    if (status === 'Fatigued') return 'text-red-500';
+                    return 'text-green-400';
+                };
+                return `
+                    <div class="w-full">
+                        <h3 class="font-orbitron text-2xl text-glow-cyan mb-4">CREW MANIFEST</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${crew.map(member => `
+                                <div class="border border-cyan-500/20 p-3 rounded-md">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-bold text-lg">${member.name} // ${member.callsign}</p>
+                                            <p class="text-sm text-gray-400">${member.role}</p>
+                                        </div>
+                                        <p class="font-bold ${statusColor(member.status)}">${member.status.toUpperCase()}</p>
+                                    </div>
+                                    <div class="mt-2 flex items-center space-x-2">
+                                        <p class="text-xs">ANCHORS: ${member.anchors}/5</p>
+                                        <div class="w-full h-2 bg-black/50 rounded-full overflow-hidden">
+                                            <div class="h-full bg-cyan-400" style="width: ${member.anchors/5 * 100}%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="h-8 mt-2 flex items-center space-x-1">
+                                        ${Array(20).fill(0).map(() => `<div class="w-1 h-full bg-green-500/50 pulse-ekg" style="animation-delay: ${Math.random() * -1.5}s"></div>`).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            };
+
+            const renderNavView = () => `
+                <div class="w-full text-center">
+                    <h3 class="font-orbitron text-2xl text-glow-cyan mb-4">NAVIGATION</h3>
+                    <img src="https://i.imgur.com/OFb2r2j.png" alt="Star map with entropic zones" class="mx-auto opacity-75 border-2 border-cyan-500/30 rounded-lg"/>
+                    <p class="mt-4 text-amber-400 text-glow-amber">WARNING: Uncharted territory. Entropic interference detected.</p>
+                </div>
+            `;
+            
+            const renderCommsView = () => `
+                <div class="w-full">
+                     <h3 class="font-orbitron text-2xl text-glow-cyan mb-4">FACTION COMMS</h3>
+                     <div class="bg-black/30 p-4 rounded">
+                        <p class="text-amber-400 font-bold">INCOMING TRANSMISSION...</p>
+                        <p class="text-gray-400">SOURCE: Outer Rim Directorate Remnants</p>
+                        <p class="mt-2">"We have your signal. The price for an alliance is proof. Send us the unredacted Gorgon Station data. We'll know if it's real. You have one cycle."</p>
+                        <div class="mt-4 flex space-x-2">
+                            <button class="btn-command p-2 rounded flex-1">ACCEPT</button>
+                            <button class="btn-command p-2 rounded flex-1">DECLINE</button>
+                        </div>
+                     </div>
+                </div>
+            `;
+
+            const renderSystemsView = () => `
+                <div class="w-full">
+                     <h3 class="font-orbitron text-2xl text-glow-cyan mb-4">SYSTEMS STATUS</h3>
+                     <div class="space-y-3">
+                        <p><span class="font-bold text-green-400">HYBRID FIREWALL:</span> STABLE (w/ embedded glyphs)</p>
+                        <p><span class="font-bold text-green-400">CONCORDANCE DRIVE:</span> NOMINAL</p>
+                        <p><span class="font-bold text-amber-400">LIFE SUPPORT:</span> RECYCLING @ 92% (minor entropic drag)</p>
+                        <p><span class="font-bold text-red-500">LONG-RANGE SENSORS:</span> OFFLINE (Vector Prime damage)</p>
+                     </div>
+                     <div class="mt-4 p-4 border border-red-500/30 rounded bg-red-900/20 text-red-300">
+                        <p class="font-bold glitch-effect">!! WHO_DO_YOU_TRUST? - GHOST INTRUSION DETECTED !!</p>
+                     </div>
+                </div>
+            `;
+
+            // --- LOGIC ---
+            const updateLogs = (filter = '') => {
+                dataStreamList.innerHTML = '';
+                const filteredLogs = logs.filter(log => log.content.toLowerCase().includes(filter.toLowerCase()));
+                
+                filteredLogs.forEach(log => {
+                    const li = document.createElement('li');
+                    li.className = 'border-b border-gray-800 pb-1 cursor-pointer hover:bg-gray-800/50 p-1';
+                    
+                    let typeColor = 'text-cyan-400';
+                    if (log.type === 'ALERT') typeColor = 'text-red-500 text-glow-red';
+                    if (log.type === 'INTEL') typeColor = 'text-amber-400 text-glow-amber';
+                    
+                    li.innerHTML = `<span class="font-bold ${typeColor}">[${log.time} // ${log.type}]</span> ${log.content}`;
+                    dataStreamList.appendChild(li);
+                });
+            };
+            
+            // SYNTHESIS NOTE (ORACLE): Event listeners added for node navigation and log filtering.
+            document.getElementById('node-crew').addEventListener('click', () => mainDisplay.innerHTML = renderCrewView());
+            document.getElementById('node-nav').addEventListener('click', () => mainDisplay.innerHTML = renderNavView());
+            document.getElementById('node-comms').addEventListener('click', () => mainDisplay.innerHTML = renderCommsView());
+            document.getElementById('node-systems').addEventListener('click', () => mainDisplay.innerHTML = renderSystemsView());
+            logSearch.addEventListener('keyup', () => updateLogs(logSearch.value));
+
+            // Initial state
+            updateLogs();
+            
+            // SYNTHESIS NOTE (ORACLE): Simulating live log updates per network feedback.
+            setInterval(() => {
+                const newLog = { time: new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }), type: 'SYSTEM', content: 'Subspace anomaly detected... Recalibrating sensors.' };
+                logs.unshift(newLog);
+                if(logs.length > 20) logs.pop();
+                updateLogs(logSearch.value);
+            }, 15000);
+        });
+    </script>
+</body>
+</html>
