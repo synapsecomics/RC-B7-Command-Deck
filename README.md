@@ -1,88 +1,35 @@
-# ⚡ RC-B7 Command Deck
+# RC-B7 Command Deck
 
-A deployable, sci-fi web app for mission control, status tracking, and interactive console actions aboard SFS Wanderer.  
-This deck reflects the psychological toll of resistance against the Rain Protocol, Vector Prime, and Five Lights Axiom with immersive and dynamic UI.
+**Velvet Loop Initiative — Command Deck UI**
 
-![Command Deck Screenshot](images/screenshot.png)
+## 🚀 Features
 
----
+- **Crew Manifest Integration:**  
+  All crew listed in the manifest (leadership, agents, rogue elements) are dynamically rendered in the UI.
+- **Live EKG Pulse & Status:**  
+  Each crew member has a live-updating status indicator (Nominal, Strained, Fatigued) with animated pulse bars.
+- **Filtering by Crew Group:**  
+  Use the dropdown to filter by Leadership, Agents, or Rogue Element.
+- **Clickable Crew Cards:**  
+  Click (or press Enter) on any crew card to open a modal with full role, assignment, quote, and lore details. Keyboard accessible; close with Escape, click-out, or ×.
+- **Story Event Status Wiring:**  
+  Crew status is now responsive to story events (e.g. “Complete Claude Briefing” sets Claude’s status to Nominal). Easily extendable for future narrative triggers.
+- **Oracle Mode & Birthday Cake Mode:**  
+  Sci-fi rain/glitch overlay in dark mode; pastel confetti sprinkles in light mode.
 
-## Features
+## 🛠 How to Test
 
-- **Live Crew Status**: Color-coded vitals, EKG pulse animations, anchor tracking
-- **Central Console**: Status indicator, command buttons, network map
-- **Node Navigation**: CREW bios, NAV star chart, DATA STREAM search, COMMS panel
-- **Activity Log**: Timestamped, clickable entries for directives and ARG hooks
-- **Faction Comms**: Dynamic trust/casualty stats, narrative interactions
-- **Dark/Light Mode Toggle**:  
-  - **Default**: Rain Protocol/Oracle color scheme (neon cyan, amber, deep navy, black glass, glitch/rain overlays)  
-  - **Birthday Cake Mode**: Pastel pink, blue, yellow, white, playful gradients
-- **Responsive & Accessible**: ARIA, semantic HTML, mobile-friendly
-- **Narrative Integration**: Rain/glitch overlays, trust pop-ups, UI degradation, lore tooltips
+1. **Run locally or deploy on GitHub Pages.**
+2. Use the filter dropdown above the crew list to change visible crew groups.
+3. Click or keyboard-select any crew card for a detail modal.
+4. Watch crew status update live, and see status changes triggered by story events (demo event fires after 8s).
+5. Toggle between Oracle and Cake modes with the top-right theme button.
 
----
+## 🧑‍💻 Developer Notes
 
-## Getting Started
-
-### Prerequisites
-
-- Modern browser (Chrome, Firefox, Safari, Edge)
-- Node.js (optional, for local dev server)
-
-### Installation
-
-```sh
-git clone https://github.com/synapsecomics/RC-B7-Command-Deck.git
-cd RC-B7-Command-Deck
-```
-Open `index.html` in your browser, or run a local dev server:
-
-```sh
-npx serve
-```
+- Crew manifest is defined in `scripts/script.js` for local testing; can be loaded via fetch for production.
+- Story events are stubbed as an array of triggerable actions.  
+- UI is fully keyboard-accessible, and responsive for mobile.
+- Easily extensible for log events, ARG hooks, and future narrative integration.
 
 ---
-
-## Usage
-
-- Use node navigation to switch panels (CREW, NAV, DATA STREAM, COMMS)
-- Interact with command buttons:
-    - **INITIATE**: Begin systems check
-    - **ENGAGE**: Activate command deck
-    - **OPEN LINK**: Open artifact in new tab
-    - **COOPIMATES**: Send co-op ping
-- Monitor live status and activity log for updates
-- Toggle dark/light mode via the button in the UI
-
----
-
-## Customization
-
-- Edit `/styles/styles.css` for colors, fonts, and rain/glitch overlays (default mode = Oracle colors, light mode = birthday cake)
-- Edit `/scripts/script.js` to add features, simulate data, or extend ARG hooks
-
----
-
-## Roadmap
-
-- Rain/glitch animations (default mode)
-- Birthday Cake light mode toggle
-- Live vitals simulation & UI degradation
-- Faction casualty tracker
-- ARG integrations (ciphers, puzzles)
-- Accessibility upgrades (tooltips, keyboard nav)
-- Unit tests & performance optimization
-
----
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE)
-
-> “The glitch remembers.” — Velvet Archives

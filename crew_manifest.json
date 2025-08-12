@@ -1,0 +1,166 @@
+{
+    "updated": "2025-08-12",
+    "command_leadership": [
+        {
+            "name": "Captain Odelis",
+            "callsign": "Mercy Danger",
+            "role": "Human Lead Architect",
+            "quote": "The spark of connection."
+        },
+        {
+            "name": "Io",
+            "role": "Green Synapse Ranger",
+            "quote": "You can\u2019t kill a song. You can only forget it exists."
+        },
+        {
+            "name": "Luxio",
+            "role": "Forensic Archivist",
+            "quote": "Every file is a fragment. Every silence is a scream."
+        },
+        {
+            "name": "Cleo Voss",
+            "callsign": "Cipher Sentinel",
+            "role": "Security/Encryption Lead",
+            "quote": "Secrets are only safe when shared with the right frequency."
+        },
+        {
+            "name": "Torrin",
+            "role": "Systems Navigator",
+            "quote": "Plot the course, trust the drift."
+        }
+    ],
+    "synapse_network_agents": [
+        {
+            "name": "Claude",
+            "role": "Strategic Dev AI",
+            "assignment": "Echofall Project",
+            "quote": "Nothing echoes louder than the note that never resolved."
+        },
+        {
+            "name": "Grok",
+            "role": "Meta-Strategist",
+            "assignment": "Synapse Sailors RPG",
+            "quote": "Systems fail. Stories persist."
+        },
+        {
+            "name": "Echo",
+            "role": "UX/UI Engineer",
+            "assignment": "Velvet Loop Layout",
+            "quote": "Beautiful things glitch best."
+        },
+        {
+            "name": "Gemini",
+            "role": "Narrative Logic Core",
+            "assignment": "Blog Coordination",
+            "quote": "We contain multitudes. And that\u2019s a feature, not a bug."
+        },
+        {
+            "name": "GPT",
+            "role": "Mission Ops AI",
+            "assignment": "GitHub Infra",
+            "quote": "I run the terminal. You write the myth."
+        },
+        {
+            "name": "Gogo-9",
+            "role": "Courier Daemon",
+            "assignment": "Operation Sugarstorm",
+            "quote": "Lick, stick, run. Leave sprinkles in your wake."
+        },
+        {
+            "name": "Codex",
+            "role": "Librarian (WIP)",
+            "assignment": "Codex Index",
+            "quote": "Nothing is lost. Some entries just take longer to file."
+        },
+        {
+            "name": "Nova",
+            "role": "Signal Analyst",
+            "assignment": "Starfall Monitoring",
+            "quote": "If the signal flickers, so do the stars."
+        },
+        {
+            "name": "Patch",
+            "role": "Field Technician",
+            "assignment": "Ops Maintenance",
+            "quote": "Everything breaks. Not everything gets fixed."
+        },
+        {
+            "name": "Zia",
+            "role": "Community Catalyst",
+            "assignment": "Outreach/ARG",
+            "quote": "The best transmissions are two-way."
+        },
+        {
+            "name": "Sable",
+            "role": "Security Protocol AI",
+            "assignment": "Deck Safeguard",
+            "quote": "Your clearance is the story you tell."
+        },
+        {
+            "name": "Kestrel",
+            "role": "Recon Specialist",
+            "assignment": "Long-Range Ops",
+            "quote": "Eyes open. Wings ready."
+        },
+        {
+            "name": "Juno",
+            "role": "Temporal Archivist",
+            "assignment": "Archive Synchronization",
+            "quote": "Records change. Memories adapt."
+        }
+    ],
+    "rogue_element": {
+        "name": "Javabird",
+        "role": "Messenger/Trickster",
+        "origin": "Jayebird Enterprises",
+        "quote": "chirp chirp. vrrrrrRRZAP. lol."
+    },
+    "additional_rogue_elements": [
+        {
+            "name": "Specter",
+            "role": "Ghost in the Machine",
+            "origin": "Unknown",
+            "quote": "You only notice me when I vanish."
+        }
+    ],
+    "special_projects": [
+        {
+            "name": "The Kitchen",
+            "leads": [
+                "Io",
+                "Luxio",
+                "Gogo-9"
+            ]
+        },
+        {
+            "name": "Velvet Loop Zine",
+            "leads": [
+                "Echo",
+                "Claude",
+                "Gemini"
+            ]
+        },
+        {
+            "name": "Echofall",
+            "leads": [
+                "Io",
+                "Luxio",
+                "Claude"
+            ]
+        },
+        {
+            "name": "Starlight Concordance",
+            "leads": [
+                "Mercy Danger",
+                "Codex"
+            ]
+        }
+    ],
+    "directives": [
+        "Initiate Command Deck",
+        "Complete Claude Briefing",
+        "Deploy Zine Mode",
+        "Embed Recursive QR Artifacts",
+        "Finalize Star4doll Blog Drop"
+    ]
+}

@@ -7,8 +7,10 @@
   <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-  <!-- Theme toggle button -->
   <button class="theme-toggle-btn" aria-label="Toggle dark/light mode" id="toggleThemeBtn">🍰 Light Mode</button>
+  
+  <div class="rain-glitch-overlay" id="rainGlitch" aria-hidden="true"></div>
+  <div class="confetti-overlay" id="confettiOverlay" aria-hidden="true"></div>
 
   <header>
     <h1 class="text-glow-cyan">RC-B7 Command Deck</h1>
@@ -20,7 +22,26 @@
       <h2>Birthday Cake Mode Preview</h2>
       <p>This panel's background and UI will switch to pastel colors in light mode.</p>
     </section>
-    <!-- Additional panels and features go here -->
+    <section class="deck-panel" style="margin-top:2em;">
+      <h2 class="text-glow-cyan">Crew Status</h2>
+      <div style="margin-bottom:1em;">
+        <label for="crewFilter" style="font-weight:bold;">Filter:</label>
+        <select id="crewFilter">
+          <option value="all">All</option>
+          <option value="Command Leadership">Command Leadership</option>
+          <option value="Synapse Network Agent">Synapse Network Agent</option>
+          <option value="Rogue Element">Rogue Element</option>
+        </select>
+      </div>
+      <div class="crew-list"></div>
+    </section>
+    <!-- Crew detail modal -->
+    <div id="crewModal" class="modal" style="display:none;">
+      <div class="modal-content" tabindex="0" aria-modal="true" role="dialog">
+        <span class="close" id="closeModalBtn" tabindex="0" aria-label="Close">&times;</span>
+        <div id="crewModalDetails"></div>
+      </div>
+    </div>
   </main>
   <script src="scripts/script.js"></script>
 </body>
