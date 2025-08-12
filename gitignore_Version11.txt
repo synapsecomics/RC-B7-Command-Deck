@@ -1,0 +1,8 @@
+# Ignore node_modules and build artifacts if later added
+node_modules/
+dist/
+*.log
+.DS_Store
+.env
+network-map.png
+star_console.png

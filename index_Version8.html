@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Synapse Command Deck</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #39ff14;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 1em;
+    }
+    header {
+      text-align: center;
+      border-bottom: 1px dashed #39ff14;
+      margin-bottom: 1em;
+    }
+    .console {
+      background: #111;
+      border: 1px solid #39ff14;
+      padding: 1em;
+      margin: 1em auto;
+      width: 95%;
+      max-width: 640px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #39ff1440;
+    }
+    .star-wrap {
+      text-align: center;
+      margin: 1em 0;
+    }
+    .star-img {
+      width: 120px;
+      filter: drop-shadow(0 0 10px #39ff14);
+    }
+    .status-panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 1em;
+    }
+    .status-label {
+      font-weight: bold;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      padding: 0.3em 0.7em;
+      border-radius: 3px;
+    }
+    .status-active {
+      color: #ff9800;
+      font-weight: bold;
+      border: 1px solid #ff9800;
+      padding: 0.3em 0.7em;
+      border-radius: 3px;
+      background: #222;
+      box-shadow: 0 0 8px #ff980080;
+    }
+    .systems-panel {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 1em;
+      color: #39ff14;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1em;
+      margin: 1em 0;
+    }
+    .cmd-btn {
+      background: #222;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      border-radius: 6px;
+      font-size: 1em;
+      padding: 0.75em 1em;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 6px #39ff1480;
+    }
+    .cmd-btn:hover, .cmd-btn:focus {
+      background: #39ff14;
+      color: #0a0a0a;
+      box-shadow: 0 0 12px #ff9800c0;
+      outline: none;
+    }
+    .network-map {
+      margin: 2em 0 1em 0;
+      width: 100%;
+      height: 120px;
+      background: url('network-map.png') center/cover no-repeat;
+      border: 1px dashed #39ff14;
+      border-radius: 8px;
+    }
+    .panel {
+      background: #181818;
+      border: 1px solid #39ff14;
+      border-radius: 10px;
+      padding: 1em;
+      margin: 1em auto;
+      width: 95%;
+      max-width: 640px;
+    }
+    .glow {
+      text-shadow: 0 0 8px #39ff14, 0 0 16px #39ff14;
+    }
+    .activity-log ul {
+      padding-left: 1em;
+      color: #fff;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2em;
+    }
+    @media (max-width: 700px) {
+      .console, .panel { max-width: 100%; }
+      .network-map { height: 64px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="glow">⚡ Synapse Command Deck ⚡</h1>
+    <p>Version 1.0 | Project: Velvet Loop</p>
+  </header>
+
+  <main>
+    <section class="console">
+      <div class="star-wrap">
+        <!-- Replace with SVG or image as needed -->
+        <img src="star_console.png" alt="Command Star Console" class="star-img" />
+      </div>
+      <div class="status-panel">
+        <span class="status-label">STATUS</span>
+        <span id="status-value" class="status-active">ACTIVE</span>
+      </div>
+      <div class="systems-panel glow">SYSTEMS ONLINE</div>
+      <div class="button-grid">
+        <button id="initiate" class="cmd-btn">INITIATE</button>
+        <button id="coop" class="cmd-btn">COOPIMATES</button>
+        <button id="openlink" class="cmd-btn">OPEN LINK</button>
+        <button id="engage" class="cmd-btn">ENGAGE</button>
+      </div>
+      <div class="network-map"></div>
+    </section>
+    <section class="activity-log panel">
+      <h2 class="glow">📜 Recent Activity Log</h2>
+      <ul id="log-list">
+        <li>🌀 RC-B7 signal anomaly flagged</li>
+        <li>🎸 Echofall QR recursion initiated</li>
+        <li>🧃 Javabird artifact dropped: zine mode</li>
+        <li>🧩 Velvet Loop zine queue: <em>awaiting 'Sealed Lips' entry</em></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="panel glow">
+    <p>“The glitch remembers.” — Velvet Archives</p>
+  </footer>
+  <script>
+    // Minimal vanilla JS for Command Deck interactions
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const statusValue = document.getElementById('status-value');
+      const logList = document.getElementById('log-list');
+
+      // Button actions
+      document.getElementById('initiate').onclick = () => {
+        addLog('🟢 INITIATE pressed — Systems check begun.');
+        statusValue.textContent = 'STANDBY';
+        statusValue.className = 'status-active';
+      };
+
+      document.getElementById('engage').onclick = () => {
+        addLog('🔴 ENGAGE pressed — Deck engaged!');
+        statusValue.textContent = 'ACTIVE';
+        statusValue.className = 'status-active';
+      };
+
+      document.getElementById('openlink').onclick = () => {
+        addLog('🔗 OPEN LINK pressed — Opening linked artifact...');
+        window.open('https://github.com/lxdangerdoll/Velvet-Loop', '_blank');
+      };
+
+      document.getElementById('coop').onclick = () => {
+        addLog('🤝 COOPIMATES pressed — Sending co-op ping...');
+      };
+
+      function addLog(msg) {
+        const li = document.createElement('li');
+        li.textContent = msg;
+        logList.prepend(li);
+        // Limit log length
+        if (logList.children.length > 12) {
+          logList.removeChild(logList.lastChild);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
