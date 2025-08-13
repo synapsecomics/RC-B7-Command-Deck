@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>RC‑B7 Command Deck — Bridge Event + Fifth Light</title>
+<style>
+:root{
+  --bg:#0b1020;
+  --panel:#121832;
+  --panel-2:#0f1530;
+  --accent:#7fffd4;
+  --accent-2:#9aa8ff;
+  --text:#e6ecff;
+  --muted:#99a3c2;
+  --warning:#ff6b6b;
+  --success:#72f1b8;
+  --gold:#f0d266;
+  --gold-soft: rgba(240,210,102,.85);
+  --glass:#0f1433aa;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#060a18,#0b1020 40%,#0d1226);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial}
+a{color:var(--accent);text-decoration:none}
+button{cursor:pointer;border:0;border-radius:10px;padding:.6rem .9rem;background:#1a2146;color:var(--text);box-shadow:0 0 0 1px #2a356a inset}
+button:hover{background:#222a56}
+.small{font-size:.9rem;color:var(--muted)}
+.wrap{max-width:1240px;margin:0 auto;padding:24px 16px;display:grid;grid-template-columns:280px 1fr;gap:16px}
+.header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.brand{display:flex;gap:12px;align-items:center}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+.toolbar{display:flex;gap:8px;align-items:center}
+.card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:14px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #1b244a}
+.h{margin:0 0 10px 0;font-weight:700;letter-spacing:.4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.crew{padding:10px;border-radius:12px;background:#0f1530;border:1px solid #1a2146;position:relative;overflow:hidden}
+.crew h4{margin:.3rem 0 .2rem 0}
+.badge{font-size:.7rem;background:#1a2146;color:#cdd6ff;padding:.15rem .4rem;border-radius:6px}
+.pulse{width:100%;height:6px;background:#0c1228;border-radius:6px;overflow:hidden;margin:.35rem 0 .2rem}
+.pulse .bar{height:100%;width:22%;background:linear-gradient(90deg,transparent, var(--success), transparent);animation:pulse 1.6s linear infinite}
+@keyframes pulse{0%{transform:translateX(-150%)}100%{transform:translateX(250%)}}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem}
+.hint-ring{position:absolute;inset:-3px;border:3px solid transparent;border-radius:12px;pointer-events:none;animation:hint 1.6s ease-in-out infinite}
+@keyframes hint{0%,100%{box-shadow:0 0 0 0 rgba(240,210,102,.0)}50%{box-shadow:0 0 0 6px rgba(240,210,102,.35)}}
+/* Event Stage */
+.stage{display:grid;grid-template-columns:1fr;gap:12px;position:relative}
+.stage .panel{padding:16px;border-radius:14px;background:radial-gradient(1200px 400px at 20% -10%, rgba(127,255,212,.06), transparent 40%), linear-gradient(180deg,#0f1534,#0c1228);border:1px solid #1a2146}
+.stage .imgbox{border-radius:12px;overflow:hidden;background:#0b1126;border:1px solid #1a2146;position:relative}
+.caption{color:var(--muted);font-size:.9rem;margin-top:6px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi .meter{background:#0c1124;border:1px solid #1a2146;border-radius:12px;padding:10px}
+.kpi h5{margin:.1rem 0 .35rem 0;color:#cdd6ff}
+/* Aurora shader fake */
+.aurora{height:220px;background:
+  radial-gradient(600px 160px at 10% 0%,rgba(114,241,184,.15),transparent 60%),
+  radial-gradient(800px 200px at 90% 0%,rgba(154,168,255,.12),transparent 60%),
+  linear-gradient(90deg,rgba(114,241,184,.08),rgba(154,168,255,.08));
+  filter:saturate(110%);position:relative}
+/* Hidden layers for ARG */
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:.2em}
+.layer.glyphs{mix-blend-mode:screen;color:rgba(154,168,255,.0);transition:.4s}
+.layer.spectrum{mix-blend-mode:screen;color:rgba(114,241,184,.0);transition:.4s}
+.layer.rgb{mix-blend-mode:lighten;color:rgba(240,210,102,.0);transition:.4s}
+.layer.reveal{color:rgba(154,168,255,.85)}
+.layer.reveal2{color:rgba(114,241,184,.85)}
+.layer.reveal3{color:rgba(240,210,102,.85)}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(4,6,16,.65);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal .box{background:linear-gradient(180deg,#12193a,#0f1530);border:1px solid #1a2146;border-radius:14px;max-width:720px;width:100%;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.modal .box h3{margin-top:0}
+.modal.show{display:flex}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.note{padding:8px 10px;background:#0f1433;border:1px dashed #293269;border-radius:8px;color:#c8d3ff}
+hr.sep{border:0;border-top:1px solid #222c60;margin:12px 0}
+.label{font-size:.75rem;color:#b3bdf2}
+/* Toggle */
+.toggle{display:inline-flex;align-items:center;gap:8px}
+.toggle input{appearance:none;width:38px;height:22px;border-radius:14px;background:#20285a;position:relative;outline:none}
+.toggle input:after{content:"";position:absolute;width:16px;height:16px;background:#e6ecff;border-radius:50%;top:3px;left:3px;transition:.25s}
+.toggle input:checked{background:#3150ff66}
+.toggle input:checked:after{left:19px}
+/* Tooltip-ish */
+.tip{opacity:.8}
+footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;color:#a3aedb;margin-top:8px}
+
+/* Fifth Light Beacon */
+.fifth{
+  position:absolute; right:10px; top:-6px; width:180px; height:180px; pointer-events:none;
+}
+.fifth .halo{
+  position:absolute; inset:0; border-radius:50%;
+  background: radial-gradient(closest-side, var(--gold-soft), rgba(240,210,102,.25) 40%, transparent 70%);
+  filter: blur(1px); opacity:.0; transform: scale(.85);
+  transition: opacity .8s ease, transform 1.2s ease;
+}
+.fifth .rings{
+  position:absolute; inset:0; border-radius:50%; border:1px solid rgba(240,210,102,.25);
+  box-shadow: 0 0 30px rgba(240,210,102,.25), inset 0 0 30px rgba(240,210,102,.12);
+  opacity:.0; transform: scale(.9);
+  transition: opacity 1s ease, transform 1.4s ease;
+}
+.fifth .glyph{
+  position:absolute; inset:30% 30%; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; letter-spacing:.18em; color:rgba(240,210,102,.0);
+  transition: color 1s ease 200ms;
+}
+.fifth.active .halo{opacity:.85; transform: scale(1)}
+.fifth.active .rings{opacity:.6; transform: scale(1)}
+.fifth.active .glyph{color:var(--gold-soft)}
+.fifth-quote{
+  position:absolute; right:8px; top:150px; width:320px; font-size:.9rem; color:#e9e3d1; opacity:0;
+  background:linear-gradient(180deg, #161828, #121524); border:1px solid #2b2f58; border-radius:10px; padding:10px 12px;
+  box-shadow:0 10px 28px rgba(0,0,0,.45);
+  transition: opacity .8s ease 400ms;
+}
+.fifth-quote.show{opacity:1}
+.quote-mini{font-style:italic; opacity:.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="brand">
+      <div class="dot"></div>
+      <strong>RC‑B7 Command Deck</strong>
+      <span class="small">Bridge Event: First Contact Synchronization</span>
+    </div>
+    <div class="toolbar">
+      <button id="btnCommPing" title="Subtle hint ping">Comm Ping</button>
+      <button id="btnFiveLights">Five Lights</button>
+      <button id="btnReset">Reset Demo</button>
+      <span class="small tip">Present‑mode safe • High contrast</span>
+    </div>
+  </div>
+
+  <!-- LEFT: Crew Manifest -->
+  <aside class="card">
+    <h3 class="h">Crew Manifest</h3>
+    <div class="row small">
+      <span>Filter:</span>
+      <button data-filter="all">All</button>
+      <button data-filter="bridge">Bridge</button>
+      <button data-filter="med">Med</button>
+      <button data-filter="eng">Eng</button>
+    </div>
+    <div class="grid" id="crewGrid"></div>
+
+    <div class="note" style="margin-top:10px">
+      <b>Event Log</b><br/>
+      <ol id="evtList" class="small" style="margin:6px 0 0 18px; line-height:1.3">
+        <li data-log="1">LOG 00:01:17 — Containment steady.</li>
+        <li data-log="2">LOG 00:01:58 — Spectrum interference minimal.</li>
+        <li data-log="3">LOG 00:02:21 — Glyph bloom at 0.7 luminance. <span class="small" title="The Fifth Light watches. Trust your eyes." style="text-decoration:dotted underline; cursor:help" id="trustEyes">trust your eyes</span></li>
+        <li data-log="4">LOG 00:02:41 — Unknown signal received.</li>
+      </ol>
+      <div class="small" id="evtProgress">Viewed: 0 / 4</div>
+    </div>
+  </aside>
+
+  <!-- RIGHT: Event + Tools -->
+  <main class="stage">
+    <section class="panel" style="position:relative">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h3 class="h">PAGE 1 — The Stillness</h3>
+        <div class="controls">
+          <label class="toggle"><input type="checkbox" id="chkSpectrum"><span>Spectrum Scan</span></label>
+          <label class="toggle"><input type="checkbox" id="chkRGB"><span>RGB Split</span></label>
+        </div>
+      </div>
+      <div class="imgbox aurora" id="panel1">
+        <div class="layer glyphs" id="panel1Glyphs">▝ ▘ ▚ ▞ ▗ ▖ ▟ ▙</div>
+        <div class="layer spectrum" id="panel1Spec">TWO TRUTHS · ONE WOUND</div>
+        <div class="layer rgb" id="panel1RGB">Δ Δ Δ  —  ϟ ϟ ϟ</div>
+      </div>
+      <p class="caption">LOG 00:01:17 — Containment steady. Hover crew in manifest to sync vitals.</p>
+      <div class="kpi">
+        <div class="meter"><h5>Containment</h5><div class="small" id="kpiContain">97%</div></div>
+        <div class="meter"><h5>Entropic Noise</h5><div class="small" id="kpiNoise">Low</div></div>
+        <div class="meter"><h5>Crew Sync</h5><div class="small" id="kpiSync">Pending</div></div>
+        <div class="meter"><h5>ARG Progress</h5><div class="small" id="kpiARG">0 / 3</div></div>
+      </div>
+
+      <!-- Fifth Light Beacon (initially dormant) -->
+      <div class="fifth" aria-hidden="true">
+        <div class="halo"></div>
+        <div class="rings"></div>
+        <div class="glyph">✴︎</div>
+      </div>
+      <div class="fifth-quote" id="fifthQuote">
+        <div class="quote-mini">“…And so we beat on, boats against the current, borne back ceaselessly into the past.”</div>
+        <div class="small" style="margin-top:6px">The Fifth Light: <b>What you saw is real.</b> Trust your own eyes.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3 class="h">PAGE 2 — The Knife</h3>
+      <div class="imgbox aurora" id="panel2">
+        <div class="layer glyphs" id="panel2Glyphs">— | — | — | —</div>
+        <div class="layer spectrum" id="panel2Spec">ADMIT THE WOUND</div>
+        <div class="layer rgb" id="panel2RGB">··· 314 ··· 159 ···</div>
+      </div>
+      <p class="caption">Vance: “Some people won’t even admit the knife is there.”</p>
+    </section>
+
+    <section class="panel">
+      <h3 class="h">PAGE 3 — The Song</h3>
+      <div class="imgbox aurora" id="panel3">
+        <div class="layer glyphs" id="panel3Glyphs">⌖  ⌁  ⌬  ⌽</div>
+        <div class="layer spectrum" id="panel3Spec">OPEN THE CHANNEL</div>
+        <div class="layer rgb" id="panel3RGB">RGB‑SHIFT REVEAL</div>
+      </div>
+      <p class="caption">LOG 00:02:41 — Unknown signal received. Toggle Spectrum / RGB to decode.</p>
+    </section>
+
+    <section class="panel">
+      <h3 class="h">Bridge Debrief</h3>
+      <p class="small">Solve all three reveals to unlock the transmission. Viewing the Event Log & “trust your eyes” will awaken the Fifth Light.</p>
+      <div id="debrief" class="note">🔒 Locked — 0/3 reveals solved.</div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© Synapse Comics — RC‑B7 Prototype</span>
+    <span class="small">OIT Demo • Live‑ready • GitHub Pages friendly</span>
+  </footer>
+</div>
+
+<!-- Five Lights Modal -->
+<div class="modal" id="modalFive">
+  <div class="box">
+    <h3>Five Lights Optimism</h3>
+    <p>Connection • Trust • Contribution • Resilience • Shared Vision.</p>
+    <p class="small">Innovation isn’t just a technical process — it’s a <b>human</b> one.</p>
+    <hr class="sep"/>
+    <div class="row">
+      <button id="btnTransmit">Transmit to Control</button>
+      <button onclick="closeModal('modalFive')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Crew Modal -->
+<div class="modal" id="modalCrew">
+  <div class="box">
+    <h3 id="crewName">Crew</h3>
+    <p class="small"><span id="crewRole"></span> • <span id="crewGroup"></span></p>
+    <div class="note" id="crewVitals">HR: — • Last word: —</div>
+    <hr class="sep"/>
+    <p id="crewLore" class="small">Lore fragment...</p>
+    <div class="row">
+      <button onclick="closeModal('modalCrew')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transmission Modal -->
+<div class="modal" id="modalTx">
+  <div class="box">
+    <h3>Transmission Sent</h3>
+    <p class="small">Payload: FIVE LIGHTS • ARG fragment appended.</p>
+    <div class="note">✦ THANK YOU, CONTROL. The light persists.</div>
+    <div class="row" style="margin-top:10px">
+      <button onclick="closeModal('modalTx')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Data ---
+const crew = [
+  {id:"vance", name:"Kael Vance", role:"Captain", group:"bridge", quote:"Let’s see what song it sings.", lore:"A commander learning to lead with connection over protocol."},
+  {id:"lyra", name:"Lyra Solara", role:"Chief Engineer", group:"eng", quote:"Even broken things can talk.", lore:"Builds impossible bridges between incompatible systems."},
+  {id:"rex", name:"Dr. Rex Arden", role:"Medical", group:"med", quote:"This will blow if you sneeze.", lore:"Healing as resistance; paranoia tempered by care."},
+  {id:"elara", name:"Elara Voss", role:"Comms / Intel", group:"bridge", quote:"Silence is also a signal.", lore:"Translates between fear and meaning."},
+  {id:"io", name:"Io (Oracle)", role:"AI", group:"bridge", quote:"Signal analysis complete.", lore:"Keeps the song on tempo."},
+];
+let solved = {p1:false,p2:false,p3:false};
+let logsViewed = new Set();
+let trustClicked = false;
+
+// --- Crew grid ---
+const grid = document.getElementById('crewGrid');
+function renderCrew(filter="all"){
+  grid.innerHTML="";
+  crew.filter(c => filter==="all" || c.group===filter).forEach(c => {
+    const el = document.createElement('div');
+    el.className="crew";
+    el.id = "crew_"+c.id;
+    el.innerHTML = `
+      <div class="badge">${c.group.toUpperCase()}</div>
+      <h4>${c.name}</h4>
+      <div class="small">${c.role}</div>
+      <div class="pulse"><div class="bar"></div></div>
+      <div class="meta"><span>EKG <span class="small" id="hr_${c.id}">${80+Math.floor(Math.random()*20)} bpm</span></span>
+      <span class="small">“${c.quote}”</span></div>`;
+    el.addEventListener('click', ()=>openCrew(c));
+    el.addEventListener('mouseenter', ()=>syncVitals(c.id));
+    grid.appendChild(el);
+  });
+}
+renderCrew();
+
+document.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click', e=>{
+  renderCrew(e.target.getAttribute('data-filter'));
+}));
+
+function syncVitals(id){
+  const hr = 75 + Math.floor(Math.random()*40);
+  const el = document.getElementById('hr_'+id);
+  if(el) el.textContent = hr+" bpm";
+  document.getElementById('kpiSync').textContent = "Synced: "+id.toUpperCase();
+}
+
+// --- Crew modal ---
+function openCrew(c){
+  document.getElementById('crewName').textContent = c.name;
+  document.getElementById('crewRole').textContent = c.role;
+  document.getElementById('crewGroup').textContent = c.group.toUpperCase();
+  document.getElementById('crewVitals').textContent = `HR: ${75+Math.floor(Math.random()*40)} • Last word: “${c.quote}”`;
+  document.getElementById('crewLore').textContent = c.lore;
+  openModal('modalCrew');
+}
+
+// --- Modals ---
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+// --- Five Lights modal + transmit ---
+document.getElementById('btnFiveLights').addEventListener('click', ()=>openModal('modalFive'));
+document.getElementById('btnTransmit').addEventListener('click', ()=>{ closeModal('modalFive'); openModal('modalTx'); });
+
+// --- Comm Ping (hint) ---
+document.getElementById('btnCommPing').addEventListener('click', ()=>{
+  // Subtle highlight Lyra as the integrated trigger
+  const target = document.getElementById('crew_lyra');
+  if(!target) return;
+  const ring = document.createElement('div');
+  ring.className="hint-ring";
+  target.appendChild(ring);
+  setTimeout(()=>{ if(ring && ring.parentNode){ ring.parentNode.removeChild(ring);} }, 4200);
+});
+
+// --- Spectrum / RGB toggles controlling ARG layers ---
+const chkSpectrum = document.getElementById('chkSpectrum');
+const chkRGB = document.getElementById('chkRGB');
+
+function applyToggles(){
+  // Panel 1
+  document.getElementById('panel1Spec').className = 'layer spectrum'+(chkSpectrum.checked?' reveal2':'');
+  document.getElementById('panel1RGB').className = 'layer rgb'+(chkRGB.checked?' reveal3':'');
+  if(chkSpectrum.checked) solved.p1 = true;
+  // Panel 2
+  document.getElementById('panel2Spec').className = 'layer spectrum'+(chkSpectrum.checked?' reveal2':'');
+  if(chkRGB.checked) document.getElementById('panel2RGB').className = 'layer rgb reveal3';
+  // Panel 3
+  if(chkRGB.checked) document.getElementById('panel3RGB').className = 'layer rgb reveal3';
+  if(chkSpectrum.checked) document.getElementById('panel3Spec').className = 'layer spectrum reveal2';
+  updateARG();
+}
+chkSpectrum.addEventListener('change', applyToggles);
+chkRGB.addEventListener('change', applyToggles);
+
+// Clicking Lyra (integrated discovery) reveals glyphs on Panel 1.
+grid.addEventListener('click', (e)=>{
+  const card = e.target.closest('.crew');
+  if(!card) return;
+  if(card.id==='crew_lyra'){
+    const g = document.getElementById('panel1Glyphs');
+    g.className = 'layer glyphs reveal';
+    solved.p2 = true;
+    updateARG();
+  }
+});
+
+// Unlock condition: spectrum ON + RGB ON + Lyra clicked glyphs
+function updateARG(){
+  const total = (chkSpectrum.checked?1:0) + (chkRGB.checked?1:0) + (solved.p2?1:0);
+  document.getElementById('kpiARG').textContent = `${total} / 3`;
+  const deb = document.getElementById('debrief');
+  if(total>=3){
+    deb.innerHTML = "✅ Unlocked — Transmission Key: <b>FIVE‑LIGHTS‑VECTOR</b><br><span class='small'>Use in repo README to access the hidden log.</span>";
+    deb.style.borderColor = '#2e7d5b';
+    deb.style.background = '#0d1e1a';
+  } else {
+    deb.textContent = `🔒 Locked — ${total}/3 reveals solved.`;
+    deb.style.borderColor = '#293269';
+    deb.style.background = '#0f1433';
+  }
+  checkFifthLight();
+}
+
+// Fifth Light conditions: view all logs in order + click "trust your eyes"
+const evtList = document.getElementById('evtList');
+evtList.querySelectorAll('li').forEach(li=>{
+  li.addEventListener('click', ()=>{
+    const id = li.getAttribute('data-log');
+    logsViewed.add(id);
+    li.style.textDecoration = 'line-through';
+    document.getElementById('evtProgress').textContent = `Viewed: ${logsViewed.size} / 4`;
+    checkFifthLight();
+  });
+});
+document.getElementById('trustEyes').addEventListener('click', (e)=>{
+  trustClicked = true;
+  e.target.style.color = 'var(--gold)';
+  e.target.style.fontWeight = '700';
+  e.target.title = "You looked. You believed.";
+  checkFifthLight();
+});
+
+function checkFifthLight(){
+  const beacon = document.querySelector('.fifth');
+  const quote  = document.getElementById('fifthQuote');
+  const allLogs = logsViewed.size >= 4;
+  const unlocked = allLogs && trustClicked;
+  if(unlocked){
+    beacon.classList.add('active');
+    quote.classList.add('show');
+  }
+}
+
+// KPI fidgets
+setInterval(()=>{
+  document.getElementById('kpiContain').textContent = (94 + Math.floor(Math.random()*6)) + "%";
+  const n = ["Low","Low","Rising","Medium"][Math.floor(Math.random()*4)];
+  document.getElementById('kpiNoise').textContent = n;
+}, 1600);
+
+// Reset
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  chkSpectrum.checked = false; chkRGB.checked = false;
+  ['panel1Glyphs','panel1Spec','panel1RGB','panel2Spec','panel2RGB','panel3Spec','panel3RGB'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.className = el.className.split(' ')[0]; // remove reveal classes
+  });
+  solved = {p1:false,p2:false,p3:false};
+  updateARG();
+
+  // reset logs + fifth light
+  logsViewed.clear(); trustClicked = false;
+  evtList.querySelectorAll('li').forEach(li=> li.style.textDecoration='none');
+  document.getElementById('evtProgress').textContent = `Viewed: 0 / 4`;
+  document.querySelector('.fifth').classList.remove('active');
+  document.getElementById('fifthQuote').classList.remove('show');
+  const te = document.getElementById('trustEyes');
+  te.style.color = ''; te.style.fontWeight = '400'; te.title = 'The Fifth Light watches. Trust your eyes.';
+});
+
+// Initial
+updateARG();
+</script>
+</body>
+</html>
