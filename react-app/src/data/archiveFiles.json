@@ -1,0 +1,77 @@
+{
+  "visibleFiles": [
+    {
+      "name": "readme.txt",
+      "type": "text",
+      "content": "Welcome to the Fifth Light Deep Archive.\n\nThis terminal provides access to classified files and historical records.\nSome files may be hidden from view. Use search commands to locate.\n\nWarning: Archive volatility may cause content drift."
+    },
+    {
+      "name": "manifest.txt", 
+      "type": "text",
+      "content": "RC-B7 Command Deck Crew Manifest\n\nClassification: RESTRICTED\nLast Updated: 2025-08-12\n\nAll personnel accounted for.\nMorale: NOMINAL\nThreat Level: GREEN"
+    },
+    {
+      "name": "logs",
+      "type": "folder",
+      "children": [
+        {
+          "name": "system_log_001.txt",
+          "type": "text", 
+          "content": "2025-08-12 14:30:15 - Deep Archive Terminal initialized\n2025-08-12 14:30:16 - Fifth Light protocol activated\n2025-08-12 14:30:17 - Volatility monitoring: ACTIVE\n2025-08-12 14:30:18 - Ready for user input"
+        },
+        {
+          "name": "transmission_log.txt",
+          "type": "text",
+          "content": "Incoming transmission from Outer Rim...\n\n[ENCRYPTED]\n\nThe song echoes through the void.\nWhen the child walks away, what remains?\nFind the map. Trust the drift.\n\n[END TRANSMISSION]"
+        }
+      ]
+    },
+    {
+      "name": "glyphs",
+      "type": "folder", 
+      "children": [
+        {
+          "name": "Δ_421.txt",
+          "type": "text",
+          "content": "THE MAP IS NOT THE CORRIDOR. FIND THE SONG."
+        },
+        {
+          "name": "Ɣ_17.txt", 
+          "type": "text",
+          "content": "IF YOU TURN AWAY, TURN TOWARD."
+        }
+      ]
+    }
+  ],
+  "hiddenFiles": [
+    {
+      "name": "omelas_test.txt",
+      "type": "text",
+      "hidden": true,
+      "content": "The Ones Who Walk Away from Omelas — fragment\n\nYou stand at the threshold. The city sings. A single child weeps.\n\nDo you accept the bargain that buys joy with suffering?\n\n> Do you walk away? (y/n)\n\n—\nAll that you touch you change. All that you change changes you.\n— Octavia E. Butler"
+    },
+    {
+      "name": "octavia_butler_quote.txt",
+      "type": "text", 
+      "hidden": true,
+      "content": "\"All that you touch you change. All that you change changes you.\" — Octavia E. Butler\n"
+    },
+    {
+      "name": "valindra_idle.mp4",
+      "type": "video",
+      "hidden": true,
+      "path": "/valindra_idle.mp4"
+    }
+  ],
+  "searchHints": [
+    "valindra",
+    "omelas", 
+    "butler",
+    "song",
+    "child",
+    "map",
+    "drift",
+    "echo",
+    "void"
+  ]
+}

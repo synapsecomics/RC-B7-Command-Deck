@@ -1,0 +1,122 @@
+{
+  "updated": "2025-08-12",
+  "crew": [
+    {
+      "id": "odelis",
+      "name": "Captain Odelis",
+      "callsign": "Mercy Danger",
+      "role": "Human Lead Architect",
+      "status": "nominal",
+      "morale": 85,
+      "fatigue": 20,
+      "quote": "The spark of connection."
+    },
+    {
+      "id": "io",
+      "name": "Io",
+      "role": "Green Synapse Ranger",
+      "status": "nominal", 
+      "morale": 90,
+      "fatigue": 15,
+      "quote": "You can't kill a song. You can only forget it exists."
+    },
+    {
+      "id": "luxio",
+      "name": "Luxio",
+      "role": "Forensic Archivist",
+      "status": "focused",
+      "morale": 75,
+      "fatigue": 35,
+      "quote": "Every file is a fragment. Every silence is a scream."
+    },
+    {
+      "id": "cleo",
+      "name": "Cleo Voss",
+      "callsign": "Cipher Sentinel",
+      "role": "Security/Encryption Lead",
+      "status": "alert",
+      "morale": 80,
+      "fatigue": 25,
+      "quote": "Secrets are only safe when shared with the right frequency."
+    },
+    {
+      "id": "torrin",
+      "name": "Torrin",
+      "role": "Systems Navigator",
+      "status": "nominal",
+      "morale": 70,
+      "fatigue": 40,
+      "quote": "Plot the course, trust the drift."
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "role": "Strategic Dev AI",
+      "assignment": "Echofall Project",
+      "status": "active",
+      "morale": 95,
+      "fatigue": 10,
+      "quote": "Nothing echoes louder than the note that never resolved."
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "role": "Meta-Strategist",
+      "assignment": "Synapse Sailors RPG",
+      "status": "analyzing",
+      "morale": 88,
+      "fatigue": 20,
+      "quote": "Systems fail. Stories persist."
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "role": "UX/UI Engineer",
+      "assignment": "Velvet Loop Layout",
+      "status": "creating",
+      "morale": 85,
+      "fatigue": 30,
+      "quote": "Beautiful things glitch best."
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "role": "Narrative Logic Core",
+      "assignment": "Blog Coordination",
+      "status": "writing",
+      "morale": 92,
+      "fatigue": 15,
+      "quote": "We contain multitudes. And that's a feature, not a bug."
+    },
+    {
+      "id": "gpt",
+      "name": "GPT",
+      "role": "Mission Ops AI",
+      "assignment": "GitHub Infra",
+      "status": "monitoring",
+      "morale": 80,
+      "fatigue": 25,
+      "quote": "I run the terminal. You write the myth."
+    },
+    {
+      "id": "nova",
+      "name": "Nova",
+      "role": "Signal Analyst",
+      "assignment": "Starfall Monitoring",
+      "status": "scanning",
+      "morale": 78,
+      "fatigue": 35,
+      "quote": "If the signal flickers, so do the stars."
+    },
+    {
+      "id": "javabird",
+      "name": "Javabird",
+      "role": "Messenger/Trickster",
+      "origin": "Jayebird Enterprises",
+      "status": "chaotic",
+      "morale": 100,
+      "fatigue": 5,
+      "quote": "chirp chirp. vrrrrrRRZAP. lol."
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #0b0b12;
+    --panel: #0f1020;
+    --text: #e7e7ff;
+    --muted: #9aa0b3;
+    --accent: #b293ff;
+    --accent-2: #6be3ff;
+    --crt-scanline: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.06) 0px,
+      rgba(255,255,255,0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    background: radial-gradient(1200px 800px at 80% -10%, rgba(116,0,255,0.18), transparent 50%),
+                radial-gradient(900px 700px at -10% 120%, rgba(0,209,255,0.14), transparent 50%),
+                var(--bg);
+    color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    letter-spacing: 0.1px;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: block;
+  }
+}
+
+@layer components {
+  .crt-panel {
+    @apply bg-crt-panel border border-crt-accent/25 rounded-lg;
+    background: linear-gradient(180deg, #12193a, #0f1530);
+    box-shadow: 0 0 0 1px rgba(178,147,255,.25), inset 0 0 24px rgba(178,147,255,.25);
+  }
+
+  .crt-scanlines::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--crt-scanline);
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  .pulse-ekg {
+    animation: ekg-pulse 1.5s infinite;
+  }
+
+  @keyframes ekg-pulse {
+    0%, 100% { transform: scaleY(0.2); opacity: 0.3; }
+    15% { transform: scaleY(1); opacity: 1; }
+    30% { transform: scaleY(0.4); opacity: 0.7; }
+    45% { transform: scaleY(0.8); opacity: 0.9; }
+    60% { transform: scaleY(0.3); opacity: 0.5; }
+  }
+
+  @keyframes glyph-flash {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .glyph-flash {
+    animation: glyph-flash 0.3s ease-in-out;
+  }
+}
