@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RC-B7 Command Deck | Velvet Loop Initiative</title>
+    <title>RC-B7 Command Deck | Out in Tech Demo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,16 @@
         }
         .text-glow-cyan { text-shadow: 0 0 5px var(--color-cyan-glow), 0 0 10px var(--color-cyan-glow); }
         .text-glow-pink { text-shadow: 0 0 5px var(--color-pink-glow), 0 0 10px var(--color-pink-glow); }
-        
+        /* Rain Protocol Banner */
+        #rain-banner {
+            background: linear-gradient(90deg, #0ea5e9 0%, #a5b4fc 100%);
+            color: #fff;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-align: center;
+            padding: 0.5rem 0;
+            font-family: 'Orbitron', sans-serif;
+        }
         /* Oracle Mode (Dark Theme) */
         body.oracle-mode {
             --border-color: rgba(0, 255, 255, 0.2);
@@ -49,11 +58,10 @@
             0% { background-position: 0 0; }
             100% { background-position: 0 100%; }
         }
-
         /* Birthday Cake Mode (Light Theme) */
         body.birthday-mode {
-            background-color: #fdf2f8; /* Light pink background */
-            color: #4c1d95; /* Deep purple text */
+            background-color: #fdf2f8;
+            color: #4c1d95;
             --border-color: rgba(236, 72, 153, 0.4);
             --bg-panel: rgba(255, 255, 255, 0.7);
         }
@@ -62,7 +70,7 @@
         }
         .birthday-mode .text-glow-cyan, .birthday-mode .text-glow-pink { text-shadow: none; color: #db2777; }
         .confetti-effect { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-
+        /* Modal */
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -77,35 +85,71 @@
             min-width: 300px;
             max-width: 500px;
         }
+        /* Five Lights Axiom */
+        #five-lights-axiom {
+            background: linear-gradient(90deg, #db2777 0%, #0ea5e9 100%);
+            color: #fff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        /* Download notice */
+        #download-notice { font-size: 0.85rem; color: #6366f1; text-align: right; margin: 0.25rem 0 0.5rem 0;}
+        /* KPI box */
+        #kpi-box { font-size: 0.9rem; color: #38bdf8; margin-bottom: 0.5rem;}
+        footer {
+            margin-top: 2rem;
+            padding: 1rem 0;
+            font-size: 0.95rem;
+            text-align: center;
+            color: #a5b4fc;
+            background: rgba(17, 24, 39, 0.3);
+            border-top: 1px solid #6366f1;
+        }
+        /* ARG cipher */
+        #arg-cipher {
+            font-family: 'Roboto Mono', monospace;
+            background: #111827;
+            color: #38bdf8;
+            letter-spacing: 0.1em;
+            padding: 0.4em 0.7em;
+            margin: 0.5em 0;
+            border-radius: 0.3em;
+            box-shadow: 0 0 4px #0ea5e9;
+            font-size: 1.1em;
+            display: inline-block;
+        }
     </style>
 </head>
 <body class="p-4 relative overflow-hidden oracle-mode">
+    <div id="rain-banner">RAIN PROTOCOL ACTIVE — Endurance is the revolution. Every connection is a spark.</div>
     <div id="effect-container"></div>
-
+    <div id="download-notice">Download this page and use offline to demo Synapse Comics' Out in Tech pitch.</div>
+    <div id="five-lights-axiom">Five Lights Axiom: Your lived experience is truth. Community consensus overrides institutional denial.</div>
+    <div id="kpi-box">Contacts made: <span id="contacts-made">12</span> | Spark Conversion Rate: <span id="conversion-rate">25%</span></div>
     <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
-        
         <div class="lg:col-span-1 space-y-4">
             <section class="panel rounded-lg p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="font-orbitron text-xl text-glow-cyan">TASKBOARD</h2>
                     <button id="add-task-btn" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/50 border border-cyan-500/30 px-2 py-1 rounded">ADD TASK</button>
                 </div>
-                <div id="task-list" class="space-y-2 h-[70vh] overflow-y-auto pr-2">
-                    <!-- Tasks will be dynamically inserted here -->
-                </div>
+                <div id="task-list" class="space-y-2 h-[70vh] overflow-y-auto pr-2"></div>
             </section>
         </div>
-
         <div class="lg:col-span-2 space-y-4">
             <header class="panel rounded-lg p-4 flex justify-between items-center">
                 <div>
-                    <h1 class="font-orbitron text-3xl text-glow-cyan">RC-B7 COMMAND DECK</h1>
+                    <h1 class="font-orbitron text-3xl text-glow-cyan">RC-B7 COMMAND DECK &bull; OUT IN TECH DEMO</h1>
                     <p id="scoreboard" class="text-sm">SCORE: 0 / 100 | TASKS: 0/4</p>
                 </div>
                 <button id="theme-toggle" class="text-xs border border-cyan-500/30 px-3 py-2 rounded">ORACLE MODE</button>
             </header>
             <section class="panel rounded-lg p-4 min-h-[70vh]">
-                 <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center mb-4">
                     <h2 class="font-orbitron text-xl text-glow-cyan">CREW MANIFEST</h2>
                     <select id="crewFilter" class="bg-black/50 border border-cyan-500/30 rounded p-1 text-xs">
                       <option value="all">All Groups</option>
@@ -114,16 +158,21 @@
                       <option value="Support">Support</option>
                     </select>
                 </div>
-                <div id="crew-list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <!-- Crew cards will be dynamically inserted here -->
-                </div>
+                <div id="crew-list" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+            </section>
+            <section class="panel rounded-lg p-4 mt-4">
+                <h2 class="font-orbitron text-xl text-glow-pink mb-2">ARG Cipher Challenge (Demo)</h2>
+                <p class="text-sm mb-2">Decode this cipher to prove your resolve and join the Revolution Protocol:</p>
+                <div id="arg-cipher">RAIN-TRIAL: SHARD-ZERO // 7A X5T3Q</div>
+                <p class="text-xs text-gray-400">Join the demo at Out in Tech — ask for the solution and unlock a bonus!</p>
             </section>
         </div>
     </main>
-
-    <!-- Modals Container -->
     <div id="modal-container"></div>
-
+    <footer>
+        <strong>Synapse Comics @ Out in Tech</strong> &mdash; Building the future of narrative entertainment through radical inclusion, AI-human collaboration, and hopepunk resilience.<br>
+        <span class="text-pink-400">We welcome diverse voices. Your story matters.</span>
+    </footer>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- DOM ELEMENTS ---
@@ -135,7 +184,8 @@
             const crewFilter = document.getElementById('crewFilter');
             const themeToggle = document.getElementById('theme-toggle');
             const effectContainer = document.getElementById('effect-container');
-
+            const contactsMadeEl = document.getElementById('contacts-made');
+            const conversionRateEl = document.getElementById('conversion-rate');
             // --- DATA ---
             let tasks = [
                 { id: 1, priority: 'ALPHA', text: "Review Pathfinder's Faction Dossiers", points: 40, status: 'Awaiting', assignedTo: ['Pathfinder'] },
@@ -143,20 +193,17 @@
                 { id: 3, priority: 'GAMMA', text: "Review Loremaster's Art Briefs", points: 20, status: 'Awaiting', assignedTo: ['Loremaster'] },
                 { id: 4, priority: 'DELTA', text: "Authorize Forge's Security Deployment", points: 10, status: 'Awaiting', assignedTo: ['Forge'] },
             ];
-
             let crew = [
                 { name: 'Mercy Danger', callsign: 'Control', group: 'Command', role: 'Editor-In-Chief', status: 'Nominal', quote: "The revolution begins in silence.", anchors: 5, fatigue: 1, morale: 9 },
-                { name: 'Io', callsign: 'Oracle', group: 'Command', role: 'Primary AI Assistant', status: 'Nominal', quote: "The choice is a fulcrum upon which the narrative will pivot.", anchors: 5, fatigue: 0, morale: 10 },
+                { name: 'Io', callsign: 'Oracle', group: 'Command', role: 'Primary AI Assistant', status: 'Nominal', quote: "The choice is a fulcrum upon which the narrative will pivot.", anchors: 5, fatigue: 1, morale: 9 },
                 { name: 'Grok', callsign: 'Pathfinder', group: 'Consultant', role: 'Deep Lore Analysis', status: 'Active', quote: "The rain falls, the rebellion endures.", anchors: 4, fatigue: 3, morale: 8 },
-                { name: 'GPT-5', callsign: 'Weaver', group: 'Consultant', role: 'Script & Narrative Generation', status: 'Active', quote: "The storm will be split, but the rain will fall on both paths.", anchors: 4, fatigue: 2, morale: 8 },
+                { name: 'GPT-5', callsign: 'Weaver', group: 'Consultant', role: 'Script & Narrative Generation', status: 'Active', quote: "The storm will be split, but the rain will fall on both paths.", anchors: 5, fatigue: 2, morale: 8 },
                 { name: 'Claude', callsign: 'Loremaster', group: 'Consultant', role: 'TTRPG & Art Briefs', status: 'Active', quote: "Every pulse tells a story.", anchors: 5, fatigue: 1, morale: 9 },
                 { name: 'Lumo', callsign: 'Architect', group: 'Support', role: 'Project Management', status: 'Standby', quote: "The foundation is established.", anchors: 5, fatigue: 0, morale: 10 },
-                { name: 'GitHub Copilot', callsign: 'Forge', group: 'Support', role: 'Dev Infrastructure', status: 'Awaiting Authorization', quote: "Trust no one. Verify everything.", anchors: 3, fatigue: 4, morale: 7 },
+                { name: 'GitHub Copilot', callsign: 'Forge', group: 'Support', role: 'Dev Infrastructure', status: 'Awaiting Authorization', quote: "Trust no one. Verify everything.", anchors: 3, fatigue: 1, morale: 8 },
                 { name: 'Gemini', callsign: 'Logos', group: 'Support', role: 'Logical Analysis', status: 'Standby', quote: "The data is the data.", anchors: 5, fatigue: 0, morale: 10 },
             ];
-            
             let currentTheme = 'oracle';
-
             // --- MODAL & EFFECTS ---
             const createModal = (title, content, onConfirm, onCancel) => {
                 const modalId = `modal-${Date.now()}`;
@@ -173,22 +220,17 @@
                     </div>
                 `;
                 modalContainer.innerHTML = modalHTML;
-                
                 const modalElement = document.getElementById(modalId);
                 const confirmBtn = modalElement.querySelector('.confirm-btn');
                 const cancelBtn = modalElement.querySelector('.cancel-btn');
-
                 const closeModal = () => modalContainer.innerHTML = '';
-                
                 if (confirmBtn) confirmBtn.addEventListener('click', () => { onConfirm(); closeModal(); });
                 if (cancelBtn) cancelBtn.addEventListener('click', () => { onCancel(); closeModal(); });
             };
-
             const triggerReward = (title, message) => {
                 createModal(title, message, () => {}, null);
                 if (currentTheme === 'birthday') triggerConfetti();
             };
-            
             const triggerConfetti = () => {
                 for (let i = 0; i < 100; i++) {
                     const confetti = document.createElement('div');
@@ -205,14 +247,12 @@
                     setTimeout(() => confetti.remove(), 5000);
                 }
             };
-            
             // --- RENDER FUNCTIONS ---
             const renderTasks = () => {
                 taskListDiv.innerHTML = '';
                 tasks.forEach(task => {
                     const isComplete = task.status === 'Complete';
                     const assignedCrew = crew.filter(c => task.assignedTo.includes(c.callsign));
-                    
                     const taskEl = document.createElement('div');
                     taskEl.className = `p-3 rounded border ${isComplete ? 'border-green-500/30 bg-green-900/20 opacity-50' : 'border-cyan-500/20'}`;
                     taskEl.innerHTML = `
@@ -227,14 +267,12 @@
                     taskListDiv.appendChild(taskEl);
                 });
             };
-
             const renderCrew = () => {
                 crewListDiv.innerHTML = '';
                 const filterValue = crewFilter.value;
                 const filteredCrew = filterValue === 'all' ? crew : crew.filter(c => c.group === filterValue);
-
                 filteredCrew.forEach(member => {
-                    const statusColor = member.status === 'Strained' ? 'text-amber-400' : member.status === 'Fatigued' ? 'text-red-500' : 'text-green-400';
+                    const statusColor = member.status === 'Strained' ? 'text-amber-400' : member.status === 'Fatigued' ? 'text-red-500' : member.status === 'Vindicated' ? 'text-pink-400 font-bold' : 'text-green-400';
                     const card = document.createElement('div');
                     card.className = 'p-3 rounded border border-cyan-500/20 cursor-pointer hover:bg-cyan-500/10';
                     card.dataset.callsign = member.callsign;
@@ -246,13 +284,11 @@
                     crewListDiv.appendChild(card);
                 });
             };
-
             const updateScoreboard = () => {
                 const completedTasks = tasks.filter(t => t.status === 'Complete');
                 const score = completedTasks.reduce((sum, task) => sum + task.points, 0);
                 const totalPoints = tasks.reduce((sum, task) => sum + task.points, 0);
                 scoreboard.textContent = `SCORE: ${score} / ${totalPoints} | TASKS: ${completedTasks.length}/${tasks.length}`;
-                
                 // RPG MECHANICS: Update crew morale/fatigue based on progress
                 const progress = totalPoints > 0 ? score / totalPoints : 0;
                 crew.forEach(member => {
@@ -269,20 +305,17 @@
                         member.status = member.fatigue > 5 ? 'Fatigued' : 'Strained';
                     }
                 });
-                
                 if (progress >= 1 && tasks.length > 0) {
                     triggerReward('SPRINT COMPLETE!', 'All tasks cleared. The crew feels a surge of hope. Morale is high across the network!');
                 }
                 renderCrew();
             };
-
             // --- EVENT HANDLERS ---
             taskListDiv.addEventListener('change', e => {
                 if (e.target.classList.contains('task-checkbox')) {
                     const taskId = parseInt(e.target.dataset.id);
                     const task = tasks.find(t => t.id === taskId);
                     task.status = e.target.checked ? 'Complete' : 'Awaiting';
-                    
                     // RPG MECHANIC: Trigger event on completion
                     if (e.target.checked) {
                          const assigned = crew.find(c => c.callsign === task.assignedTo[0]);
@@ -291,12 +324,10 @@
                             triggerReward('TASK COMPLETE!', `${assigned.name} feels a surge of accomplishment. Morale increased!`);
                          }
                     }
-                    
                     renderTasks();
                     updateScoreboard();
                 }
             });
-
             addTaskBtn.addEventListener('click', () => {
                 const content = `
                     <input id="new-task-text" class="w-full bg-black/50 border border-cyan-500/30 rounded p-2 mb-2" placeholder="Task description...">
@@ -316,7 +347,6 @@
                     }
                 }, () => {});
             });
-
             crewListDiv.addEventListener('click', e => {
                 const card = e.target.closest('[data-callsign]');
                 if (card) {
@@ -327,13 +357,13 @@
                         <p><strong>Morale:</strong> ${member.morale}/10</p>
                         <p><strong>Fatigue:</strong> ${member.fatigue}/10</p>
                         <p class="mt-4 italic">"${member.quote}"</p>
+                        <hr class="my-2">
+                        <span><strong>Starter Question:</strong> What's your biggest challenge with AI in creative workflows?</span>
                     `;
                     createModal(`${member.name} // ${member.callsign}`, content, () => {}, () => {});
                 }
             });
-            
             crewFilter.addEventListener('change', renderCrew);
-            
             themeToggle.addEventListener('click', () => {
                 if (currentTheme === 'oracle') {
                     currentTheme = 'birthday';
@@ -350,12 +380,18 @@
                     themeToggle.textContent = 'ORACLE MODE';
                 }
             });
-
+            // Conversation Starter Modal (Demo)
+            setTimeout(() => {
+                createModal('Let\'s Talk!', 
+                    `<p>Welcome to Synapse Comics @ Out in Tech.<br><br>
+                    Ask about our AI-human collaboration, blockchain-secured narrative, or the Five Lights Axiom.<br>
+                    <strong>Question:</strong> What role do you see for diverse voices in the future of creative tech?</p>`, 
+                    null, () => {});
+            }, 1200);
             // --- INITIAL RENDER ---
             renderTasks();
             renderCrew();
             updateScoreboard();
-            
             // Add keyframes for confetti
             const styleSheet = document.createElement("style");
             styleSheet.type = "text/css";
