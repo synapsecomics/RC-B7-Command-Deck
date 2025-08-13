@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RC‑B7 • Fifth Light Deep Archive Terminal</title>
+  <!-- If your deck already injects Tailwind/shadcn, this will inherit it.
+       The minimal styles below only act as a fallback so the demo still looks good standalone. -->
+  <style>
+    :root{
+      --bg:#0b0b12;
+      --panel:#0f1020;
+      --text:#e7e7ff;
+      --muted:#9aa0b3;
+      --accent:#b293ff;
+      --accent-2:#6be3ff;
+      --crt-scanline:repeating-linear-gradient( to bottom,
+        rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px,
+        transparent 1px, transparent 3px);
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; background:radial-gradient(1200px 800px at 80% -10%, rgba(116,0,255,0.18), transparent 50%),
+      radial-gradient(900px 700px at -10% 120%, rgba(0,209,255,0.14), transparent 50%),
+      var(--bg);
+      color:var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      letter-spacing:.1px;
+    }
+    .wrap{max-width:1100px; margin:24px auto; padding:16px;}
+    .header{
+      display:flex; align-items:center; gap:16px;
+      margin-bottom:16px;
+    }
+    .logo{
+      width:42px; height:42px; position:relative; isolation:isolate;
+      border-radius:8px; background:linear-gradient(135deg, rgba(133,87,255,.35), rgba(0,221,255,.25));
+      box-shadow: 0 0 0 1px rgba(178,147,255,.25), inset 0 0 24px rgba(178,147,255,.25);
+      overflow:hidden;
+    }
+    .logo::before{ /* scanlines */
+      content:""; position:absolute; inset:0; background:var(--crt-scanline);
+      mix-blend-mode:overlay; opacity:.5; pointer-events:none;
+    }
+    .logo::after{ /* ASCII <8> */
+      content:"<8>"; display:grid; place-items:center;
+      position:absolute; inset:0; color:#e9ddff; font-weight:700; text-shadow:0 0 10px #c8a8ff;
+    }
+    .title h1{margin:0; font-size:20px; letter-spacing:.4px;}
+    .title small{display:block; color:var(--muted)}
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent 30%) , var(--panel);
+      border:1px solid rgba(178,147,255,.25);
+      border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,.35), inset 0 0 80px rgba(178,147,255,.06);
+      padding:16px; position:relative; overflow:hidden;
+    }
+    .panel::after{content:""; position:absolute; inset:0; background:var(--crt-scanline); opacity:.25; pointer-events:none;}
+    .prompt{display:flex; align-items:flex-start; gap:10px; line-height:1.6}
+    .prompt .caret{color:var(--accent);}
+    .output{min-height:320px; white-space:pre-wrap; word-break:break-word; padding:6px 0;}
+    .input{
+      background:transparent; border:none; outline:none; color:var(--text);
+      flex:1; font:inherit; caret-color:var(--accent-2);
+    }
+    .hint{color:var(--muted); font-size:13px; margin-top:8px}
+    .kbd{display:inline-block; padding:2px 6px; border:1px solid rgba(255,255,255,.15); border-radius:6px; font-size:12px; color:var(--text)}
+    .badge{display:inline-block; padding:1px 6px; border:1px solid rgba(255,255,255,.15); border-radius:999px; font-size:11px; color:var(--muted)}
+    .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(178,147,255,.4), transparent); margin:8px 0;}
+    .row{display:flex; gap:12px; flex-wrap:wrap}
+    .file{padding:4px 10px; border:1px dashed rgba(255,255,255,.14); border-radius:8px; color:#cfd3ff}
+    .folder{color:#a7f0ff}
+    .muted{color:var(--muted)}
+    .success{color:#9dffa8}
+    .danger{color:#ff9d9d}
+    /* Modal */
+    .overlay{position:fixed; inset:0; background:radial-gradient(1200px 800px at 50% -10%, rgba(133,87,255,.18), transparent 50%), rgba(4,6,13,.86); display:none; place-items:center; z-index:50;}
+    .overlay.active{display:grid;}
+    .modal{
+      width:min(920px, 92vw); border-radius:16px; padding:10px; background: #0b0b12;
+      border:1px solid rgba(178,147,255,.35); box-shadow:0 30px 80px rgba(0,0,0,.6);
+      position:relative; overflow:hidden;
+    }
+    .modal::before{content:""; position:absolute; inset:0; background:var(--crt-scanline); opacity:.18; pointer-events:none;}
+    .modal video{width:100%; height:auto; display:block; border-radius:10px;}
+    .modal .chrome{
+      position:absolute; top:8px; left:12px; right:12px; display:flex; align-items:center; justify-content:space-between; gap:8px;
+      color:#d9d3ff; font-size:12px; letter-spacing:.4px; text-transform:uppercase;
+    }
+    .chrome .dots{display:flex; gap:6px}
+    .dot{width:9px; height:9px; border-radius:999px; background:rgba(178,147,255,.5); box-shadow:0 0 10px rgba(178,147,255,.5)}
+    .glyph-flash{position:absolute; inset:0; display:none; place-items:center; background:rgba(8,2,24,.9); color:#e9ddff; font-weight:700; text-shadow:0 0 20px #b293ff;}
+    .glyph-flash.active{display:grid; animation: flash 400ms ease-in-out;}
+    @keyframes flash { 0%{opacity:0} 40%{opacity:1} 100%{opacity:0} }
+    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="title">
+        <h1>RC‑B7 Command Deck • <span class="muted">Fifth Light Deep Archive</span></h1>
+        <small>Type <span class="kbd">help</span> • Try <span class="kbd">ls</span>, <span class="kbd">search valindra</span>, <span class="kbd">open valindra_idle.mp4</span></small>
+      </div>
+      <div style="margin-left:auto"><span class="badge">ARCHIVE VOLATILITY: <strong id="vol-ind">LOW</strong></span></div>
+    </div>
+
+    <div class="panel" role="region" aria-label="Deep Archive Terminal">
+      <div id="output" class="output" aria-live="polite"></div>
+      <div class="prompt">
+        <span class="caret">RC‑B7&gt;</span>
+        <input id="input" class="input" autofocus autocomplete="off" spellcheck="false" aria-label="Command input" />
+      </div>
+      <div class="hint">Hidden items do not appear in <b>ls</b>. Discover them with <b>search</b>. Files may change when idle.</div>
+    </div>
+  </div>
+
+  <!-- Video Modal -->
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Classified Archive Playback">
+      <div class="chrome">
+        <div>CLASSIFIED ARCHIVE • VALINDRA: IDLE • <span class="muted">auto‑closing on end</span></div>
+        <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      </div>
+      <video id="vid" controls playsinline></video>
+      <div id="glyph" class="glyph-flash"><div style="font-size:clamp(18px,3.2vw,42px); letter-spacing:2px;">ᚠ ᚢ ᛉ ᛞ ᚾ &nbsp; ∴ &nbsp; Ϟ⟟ ⟟⟊ ᚼ ᛟ ᚷ •  <span class="muted">FIFTH‑LIGHT</span></div></div>
+    </div>
+  </div>
+
+  <script>
+  // ===== CONFIG =====
+  const CONFIG = {
+    VOLATILITY_MINUTES: 2,    // how often hidden text “drifts” while idle
+    GLYPH_FLASH_AT_MS: 4200,  // when to flash glyphs during video
+    VIDEO_SRC: "valindra_idle.mp4", // replace with hosted asset path
+    HIDE_OMELAS_FROM_LS: true,
+    HIDE_BUTLER_FROM_LS: true,
+    HIDE_VIDEO_FROM_LS: true
+  };
+
+  // ===== STATE =====
+  const state = {
+    now: Date.now(),
+    lastDrift: Date.now(),
+    volatility: "LOW",
+    omelasChoice: null, // 'y' or 'n'
+  };
+
+  const visibleFiles = [
+    {name:"01_Status_Report.txt", type:"text", content:
+`WANDERER STATUS: GREEN-LINE.
+Entropy pressure rising at the rim. Fifth Light operational.
+Crew condition: functional, fatigued. Trust your eyes.`},
+    {name:"02_Crew_Roster.log", type:"text", content:
+`VANCE, KAEL — COMMAND
+SOLARA, LYRA — SYSTEMS
+REX — SECURITY/MEDICAL
+… [TRUNCATED] …`},
+    {name:"03_Mission_Orders.txt", type:"text", content:
+`PRIORITY: TRANSMIT INTEL. PROTECT SHARD-ZERO.
+SECONDARY: MAINTAIN CONNECTIONS. DO NOT LET THE LIGHT GO OUT.`},
+    {name:"glyphs/", type:"folder", children:[
+      {name:"Δ_421.txt", type:"text", content:"THE MAP IS NOT THE CORRIDOR. FIND THE SONG."},
+      {name:"Ɣ_17.txt", type:"text", content:"IF YOU TURN AWAY, TURN TOWARD."}
+    ]}
+  ];
+
+  const hiddenFiles = [
+    {name:"omelas_test.txt", type:"text", hidden:true, content:
+`The Ones Who Walk Away from Omelas — fragment
+
+You stand at the threshold. The city sings. A single child weeps.
+
+Do you accept the bargain that buys joy with suffering?
+
+> Do you walk away? (y/n)
+
+—
+All that you touch you change. All that you change changes you.
+— Octavia E. Butler`},
+    {name:"octavia_butler_quote.txt", type:"text", hidden:true, content:
+`"All that you touch you change. All that you change changes you." — Octavia E. Butler
+`},
+    {name:"starship_valindra_idle.mp4", type:"video", hidden:true}
+  ];
+
+  // Utility
+  const $ = sel => document.querySelector(sel);
+  const out = $("#output");
+  const input = $("#input");
+  const overlay = $("#overlay");
+  const video = $("#vid");
+  const glyph = $("#glyph");
+  const volInd = $("#vol-ind");
+
+  function print(line=""){ out.innerHTML += line + "\\n"; out.scrollTop = out.scrollHeight; }
+  function printBlock(text){ text.split("\\n").forEach(l=>print(l)); }
+  function divider(){ print('<span class="divider"></span>'); }
+
+  function ls(path=""){
+    const items = [...visibleFiles];
+    print("<span class='row'>");
+    items.forEach(f => {
+      if (f.type==="folder"){
+        print(`<span class='file folder'>${f.name}</span>`);
+      } else {
+        print(`<span class='file'>${f.name}</span>`);
+      }
+    });
+    print("</span>");
+    if (!CONFIG.HIDE_OMELAS_FROM_LS) print("<span class='muted'>omelas_test.txt</span>");
+    if (!CONFIG.HIDE_BUTLER_FROM_LS) print("<span class='muted'>octavia_butler_quote.txt</span>");
+    if (!CONFIG.HIDE_VIDEO_FROM_LS) print("<span class='muted'>starship_valindra_idle.mp4</span>");
+  }
+
+  function findFile(name){
+    // search visible
+    const stack = [...visibleFiles];
+    while (stack.length){
+      const f = stack.shift();
+      if (f.name === name) return f;
+      if (f.type === "folder" && f.children) stack.push(...f.children);
+    }
+    // search hidden
+    return hiddenFiles.find(f=>f.name===name) || null;
+  }
+
+  function openFolder(path){
+    // simple folder open
+    const parts = path.split("/").filter(Boolean);
+    let node = {type:"folder", children:visibleFiles};
+    for (const p of parts){
+      if (!node || !node.children) return null;
+      node = node.children.find(c=>c.name===p);
+    }
+    return node;
+  }
+
+  function view(name){
+    const f = findFile(name);
+    if (!f){ print(`<span class="danger">FILE NOT FOUND:</span> ${name}`); return; }
+    if (f.type==="folder"){
+      print(`<span class="muted">DIRECTORY:</span> ${name}`);
+      if (f.children && f.children.length){
+        print("<span class='row'>");
+        f.children.forEach(c => print(`<span class='file ${c.type==="folder"?"folder":""}'>${c.name}</span>`));
+        print("</span>");
+      } else {
+        print("<span class='muted'>[empty]</span>");
+      }
+      return;
+    }
+    if (f.type==="video"){
+      play(name);
+      return;
+    }
+    // Text viewer with gentle glitch flicker
+    const content = driftedContent(f);
+    printBlock(content);
+    if (name==="omelas_test.txt"){
+      // attach choice listener
+      pendingPrompt = {file:"omelas_test.txt", action:"omelas-choice"};
+    }
+  }
+
+  function driftedContent(file){
+    // Introduce tiny alterations when volatility is not LOW
+    if (state.volatility==="LOW" || !file.content) return file.content;
+    let t = file.content;
+    // swap a few glyphs subtly
+    const swaps = [["light","lɪɢʜt"],["song","s͟o͟n͟g"],["child","c͟h͟i͟l͟d"],["map","mᵃp"]];
+    swaps.forEach(([a,b])=>{ t = t.replace(a, Math.random()<0.5?b:a); });
+    return t;
+  }
+
+  function search(keyword){
+    const files = [];
+    const pushVisible = (arr)=>arr.forEach(f => {
+      if (f.type==="folder" && f.children) pushVisible(f.children);
+      else files.push(f);
+    });
+    pushVisible(visibleFiles);
+    hiddenFiles.forEach(h=>files.push(h));
+    const hits = files.filter(f => (f.content||"").toLowerCase().includes(keyword.toLowerCase()) || f.name.toLowerCase().includes(keyword.toLowerCase()));
+    if (!hits.length){ print(`<span class="muted">No results for</span> "${keyword}"`); return; }
+    hits.forEach(h => {
+      print(`<span class='success'>${h.name}</span>`);
+      if (h.content){
+        const idx = h.content.toLowerCase().indexOf(keyword.toLowerCase());
+        if (idx>=0){
+          const snippet = h.content.substring(Math.max(0, idx-28), Math.min(h.content.length, idx+28)).replaceAll("\\n"," ");
+          print(`  … ${snippet} …`);
+        }
+      }
+    });
+  }
+
+  // Video
+  function play(name){
+    const f = findFile(name);
+    if (!f){ print(`<span class="danger">FILE NOT FOUND:</span> ${name}`); return; }
+    if (f.type!=="video"){ print(`<span class="muted">Not a media file:</span> ${name}`); return; }
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden","false");
+    video.src = CONFIG.VIDEO_SRC;
+    video.currentTime = 0;
+    glyph.classList.remove("active");
+    const timer = setTimeout(()=>{ glyph.classList.add("active"); setTimeout(()=>glyph.classList.remove("active"), 380); }, CONFIG.GLYPH_FLASH_AT_MS);
+    const cleanup = ()=>{
+      clearTimeout(timer);
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+      overlay.classList.remove("active");
+      overlay.setAttribute("aria-hidden","true");
+      print("<span class='muted'>[Playback ended]</span>");
+      input.focus();
+    };
+    video.onended = cleanup;
+    overlay.onclick = (e)=>{ if(e.target===overlay){ cleanup(); } };
+    document.onkeydown = (e)=>{ if(e.key==="Escape"){ cleanup(); } };
+    video.play().catch(()=>{/* autoplay may be blocked; user can click play */});
+  }
+
+  // Noun:Verb router (valindra CLI style)
+  function route(command){
+    // Normalize
+    const raw = command.trim();
+    if (!raw) return;
+    // Pending inline prompt?
+    if (pendingPrompt){
+      if (pendingPrompt.action==="omelas-choice" && /^[yn]$/i.test(raw)){
+        state.omelasChoice = raw.toLowerCase();
+        pendingPrompt = null;
+        print(state.omelasChoice==="y" ?
+          "<span class='muted'>You turn from the singing city. Your footsteps echo.</span>" :
+          "<span class='muted'>You stay. The bargain remains. The song goes on.</span>");
+        return;
+      }
+    }
+
+    const [verb, ...rest] = raw.split(/\s+/);
+    const arg = rest.join(" ").trim();
+
+    // aliases
+    if (verb==="ls"||verb==="list"){ ls(); return; }
+    if (verb==="cat"||verb==="open"||verb==="view"){ view(arg); return; }
+    if (verb==="grep"||verb==="search"||verb==="find"){ search(arg); return; }
+    if (verb==="clear"||verb==="cls"){ out.innerHTML=""; return; }
+    if (verb==="help"){ help(); return; }
+    if (verb==="play"){ play(arg); return; }
+
+    // noun:verb style
+    if (verb.includes(":")){
+      const [noun, action] = verb.split(":");
+      switch(noun){
+        case "file":
+          if (action==="open"||action==="view"){ view(arg); return; }
+          break;
+        case "video":
+          if (action==="play"){ play(arg || "starship_valindra_idle.mp4"); return; }
+          break;
+        case "search":
+          if (action==="run"){ search(arg); return; }
+          break;
+      }
+    }
+
+    print(`<span class="danger">UNKNOWN COMMAND:</span> ${verb}`);
+  }
+
+  function help(){
+    print("Available commands:");
+    print("  help                     Show this help");
+    print("  ls                       List archive (visible)");
+    print("  view <file>              View a text file");
+    print("  play <media>             Play a media file");
+    print("  search <keyword>         Search across visible + hidden");
+    print("  clear                    Clear the screen");
+    print("Noun:Verb forms:");
+    print("  file:view <file>   video:play <media>   search:run <kw>");
+    divider();
+    print("Hints:");
+    print("  Some files are hidden. Use search to find: valindra, omelas, butler");
+    print("  Files may drift when idle. If it looks different, trust your eyes.");
+    print("  Press <Esc> to close playback.");
+  }
+
+  // Idle drift engine
+  function tick(){
+    const now = Date.now();
+    // escalate volatility after threshold
+    if (now - state.lastDrift > CONFIG.VOLATILITY_MINUTES*60*1000){
+      state.lastDrift = now;
+      state.volatility = (state.volatility==="LOW") ? "MEDIUM" :
+                         (state.volatility==="MEDIUM") ? "HIGH" : "HIGH";
+      volInd.textContent = state.volatility;
+      // Visual ping
+      print(`<span class='muted'>[Archive drift detected • Volatility: ${state.volatility}]</span>`);
+    }
+    requestAnimationFrame(()=>{});
+  }
+  setInterval(tick, 5000);
+
+  // Inline prompt controller
+  let pendingPrompt = null;
+
+  // Boot
+  (function boot(){
+    print("<span class='muted'>[FIFTH‑LIGHT INTERFACE • Build rcb7‑da‑1.0]</span>");
+    print("Welcome to the Deep Archive. Type <help> to begin.");
+    divider();
+    ls();
+  })();
+
+  // Input handler
+  input.addEventListener("keydown", (e)=>{
+    if (e.key==="Enter"){
+      const cmd = input.value;
+      print(`<span class='caret'>RC‑B7&gt;</span> ${cmd}`);
+      route(cmd);
+      input.value="";
+    }
+  });
+  </script>
+</body>
+</html>
